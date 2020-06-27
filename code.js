@@ -1,6 +1,4 @@
-// const men = document.getElementById('menubox')
-// var links = document.getElementById('menubox').querySelectorAll('.nav')
-//var sections = document.querySelectorAll('div.sect')
+
 
 var pageState = {
     trigSlides: null,
@@ -20,22 +18,20 @@ function menuTog() {
 }
 
 
-// from https://stackoverflow.com/questions/1759987/listening-for-variable-changes-in-javascript
-
-
-
 var stateProx = new Proxy( pageState, {
 
     set: function (target, key, value) {
+
+    switch(key) {
         
-    if ( key === 'currTab' ){
+    case 'currTab':
        let links = document.getElementById('menubox').querySelectorAll('.nav')
         for (var i = 0; i < links.length; i++) {
             if ( i === value) { links[i].classList.add('picked') }
             else { links[i].classList.remove('picked') }
           }       
-    }
-    if ( key === 'currCourse' ) {
+    break
+    case 'currCourse':
         let courses = document.getElementById('courses').querySelectorAll('span')
         let slideBox = document.getElementById('slide').querySelector('img')
         for (var i = 0; i < courses.length; i++) {
@@ -44,11 +40,9 @@ var stateProx = new Proxy( pageState, {
           }
           slideBox.src = `img/slide-${value}.png`
           slideBox.style.opacity = 1
-    }
-
-    if ( key === 'pauseSlides') {
+    break
+    case 'pauseSlides':
         let butText = document.getElementById('slide').querySelector('div.pause')
-
         if(value) { 
             clearInterval(pageState.trigSlides) 
             clearTimeout(pageState.hideSlide)
@@ -58,13 +52,12 @@ var stateProx = new Proxy( pageState, {
             pageState.trigSlides = setInterval(showSlides, 1700)
             butText.innerText = "Pause" 
             butText.style.color = 'initial' 
-
         }
+    break
     }
     target[key] = value
     return true;
-}
-
+    }
   })
 
 
