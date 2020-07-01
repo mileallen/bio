@@ -9,7 +9,7 @@
     --grey50: #252525;
     --darkMask: #3131317e;
     --liteMask: #a7a6a680;
-    --clrYellow: #f8df01dc;
+    --clrYellow: #ffeb3cdc;
     }
 
 html, body {
@@ -37,6 +37,10 @@ a:link {
     color: var(--grey20);
     text-decoration: none;
   }
+
+a:hover {
+    color: #ffffff;
+}
   
 .main {
     display: grid;
@@ -299,6 +303,7 @@ margin-bottom: 2rem;
 .foot {
 padding: clamp(1%, 3vw, 4%);
 display: flex;
+flex-direction: column;
 justify-content: center;
 align-items: center;
 font-size: 0.7rem;
