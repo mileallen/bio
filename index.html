@@ -14,7 +14,7 @@
 <body>
   
     
-<div class="main">
+<div class="main" id="page" data-tab="" data-slid="0">
 
     <div class="person">
 
@@ -23,7 +23,7 @@
             <img src="./img/profile.jpg" width="100%" alt="Sach Wry">
         </div>
             <div class="profile">
-                <p class="name">Sach <span style="color:#303030">Wry</span></p>
+                <p class="name">Sach <span style="color:#000000">Wry</span></p>
                 <p>Bio and Works</p>
             </div>
         </div>
@@ -34,11 +34,11 @@
             <div class="menuTop" onclick="menuTog()"> &#x1D306; </div>
 
             <div class="menu" id="menubox" arti="what">
-                    <div  class="nav" onclick="location.href='#top'">Welcome</div>
-                    <div  class="nav" onclick="location.href='#writ'">Writing</div>
-                    <div  class="nav" onclick="location.href='#course'">Courses</div>
-                    <div  class="nav" onclick="location.href='#book'">Book site</div>
-                    <div  class="nav" onclick="location.href='#apps'">Web Apps</div>
+                    <div  class="nav" id="nav0" onclick="location.href='#top'">Welcome</div>
+                    <div  class="nav" id="nav1" onclick="location.href='#writ'">Writing</div>
+                    <div  class="nav" id="nav2" onclick="location.href='#course'">Courses</div>
+                    <div  class="nav" id="nav3" onclick="location.href='#book'">Book site</div>
+                    <div  class="nav" id="nav4" onclick="location.href='#apps'">Web Apps</div>
             </div>
 
         </div>
@@ -127,15 +127,15 @@
               
               <div class="courselist" id="courses">
 
-                <p><span>Writing Policy Memos</span></p>
-                <p><span>Multinational Companies in International Relations</span></p>
-                <p><span>Strategy, Technology and the Environment</span></p>
-                <p><span>Lessons from Economic History</span></p>
+                <p><span id="c0">Writing Policy Memos</span></p>
+                <p><span id="c1">Multinational Companies in International Relations</span></p>
+                <p><span id="c2">Strategy, Technology and the Environment</span></p>
+                <p><span id="c3">Lessons from Economic History</span></p>
 
               </div>
 
               <div id="slide">
-                  <div class="pause" onclick="stateProx.pauseSlides = !stateProx.pauseSlides"> Pause </div> 
+                  <div class="pause" onclick="pageState.pause = !pageState.pause"> Pause </div> 
                   <img src="" late-src="./img/slide-0.png"> 
               </div>
 

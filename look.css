@@ -49,15 +49,6 @@ a:hover {
     font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Avenir, "Avenir Next", "Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
   }
 
-/*
-.main > div {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-*/
-
 .person {
     height: fit-content;
     background-color: var(--greyLeft);
@@ -97,6 +88,9 @@ a:hover {
   align-items: center;
 }
 
+.profile{
+  font-weight: 300;
+}
 
 .name {
 font-size: clamp(1.1rem, calc( 1vw + 10px ), 2.2rem);
@@ -129,14 +123,7 @@ font-size: clamp(1.1rem, calc( 1vw + 10px ), 2.2rem);
   .nav:hover {
     background: #5b6878;
   }
-  .picked, .picked:hover{
-    color: var(--greyLeft);
-    background-color: var(--greyLeftDark);
-    pointer-events: none;
-    transition: ease-in-out 0.3s;
-  }
-
-  
+ 
 .works{
 
     background-color: var(--greyRight);
@@ -258,12 +245,6 @@ margin-bottom: 2rem;
   margin-bottom: 0.8rem;
 }
 
-.taught {
-  color: var(--grey50);
-  background-color: var(--clrYellow);
-  transition: ease-in-out 0.3s;
-}
-
 #slide {
   position: relative;
   margin-top: 2rem;
@@ -309,6 +290,21 @@ align-items: center;
 font-size: 0.7rem;
 }
 
+.main[data-tab="0"] #nav0, .main[data-tab="1"] #nav1, .main[data-tab="2"] #nav2, .main[data-tab="3"] #nav3, .main[data-tab="4"] #nav4 
+{
+    color: var(--greyLeft);
+    background-color: var(--greyLeftDark);
+    pointer-events: none;
+    transition: ease-in-out 0.3s;
+}
+
+.main[data-slid="0"] #c0, .main[data-slid="1"] #c1, .main[data-slid="2"] #c2, .main[data-slid="3"] #c3 
+{
+    color: var(--grey50);
+    background-color: #ffeb3c26; /* var(--clrYellow)*/
+    transition: ease-in-out 0.3s;
+}
+
 
 @media (min-width: 40em) {
   .main {
@@ -336,3 +332,4 @@ font-size: 0.7rem;
   }
 
 }
+

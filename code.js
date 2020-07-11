@@ -1,10 +1,73 @@
 
+const setState = (function pageVars(){
+    const page = document.querySelector('#page')
+    var iClose = function() {
+        var pageObj = {}
+        var stateProx = new Proxy( pageObj, {
+            set: function (target, key, value) {
+            switch(key) {
+            case 'pause':
+                let butText = document.getElementById('slide').querySelector('div.pause')
+                if(value) { 
+                    clearInterval(pageState.trigSlides) 
+                    clearTimeout(pageState.hideSlide)
+                    butText.innerText = "Resume"
+                }
+                else { 
+                    pageState.trigSlides = setInterval(showSlides, 1700)
+                    butText.innerText = "Pause" 
+                    butText.style.color = 'initial' 
+                }
+            break
+            case 'tab': case 'slid': page.dataset[key] = value
+            break
+            }
+            target[key] = value
+            return true;
+            },
+            get: function(target, key) {
+                if (key === 'tab' || key === 'slid') return page.dataset[key]
+                else return target[key]
+            }
+          })
+    return stateProx
+    }
+    return iClose
+})()
 
-var pageState = {
-    trigSlides: null,
-    hideSlide: null,
+const pageState = setState()
+
+
+function menuState() { 
+   let sections = document.querySelectorAll('div.sect')
+   let l = sections.length - 1
+   sections.forEach( el => {
+    let pTop = el.getBoundingClientRect().top
+    if (pTop > -5 && pTop < 50) {
+          pageState.tab = el.getAttribute('indx')
+     }
+    })
+    if ( sections[l].getBoundingClientRect().bottom < (screen.height + 20) && sections[l].getBoundingClientRect().bottom > (screen.height-10) ) {
+        pageState.tab = l.toString()
+   }
 }
 
+
+pageState.trigSlides = setInterval(showSlides, 1700)
+
+
+function showSlides() {
+    let slideBox = document.getElementById('slide').querySelector('img')
+    if ( pageState.tab === "2" ) {
+        pageState.hideSlide = setTimeout( () => { slideBox.style.opacity = 0 }, 1400 )
+
+        if ( pageState.slid === "3" ) pageState.slid = "0"
+        else pageState.slid++
+    
+    slideBox.src = `img/slide-${pageState.slid}.png`
+    slideBox.style.opacity = 1
+    }
+}
 
 function menuTog() {
     let men = document.getElementById('menubox')
@@ -17,78 +80,6 @@ function menuTog() {
     }
 }
 
-
-var stateProx = new Proxy( pageState, {
-
-    set: function (target, key, value) {
-
-    switch(key) {
-        
-    case 'currTab':
-       let links = document.getElementById('menubox').querySelectorAll('.nav')
-        for (var i = 0; i < links.length; i++) {
-            if ( i === value) { links[i].classList.add('picked') }
-            else { links[i].classList.remove('picked') }
-          }       
-    break
-    case 'currCourse':
-        let courses = document.getElementById('courses').querySelectorAll('span')
-        let slideBox = document.getElementById('slide').querySelector('img')
-        for (var i = 0; i < courses.length; i++) {
-            if ( i === value) { courses[i].classList.add('taught') }
-            else { courses[i].classList.remove('taught') }
-          }
-          slideBox.src = `img/slide-${value}.png`
-          slideBox.style.opacity = 1
-    break
-    case 'pauseSlides':
-        let butText = document.getElementById('slide').querySelector('div.pause')
-        if(value) { 
-            clearInterval(pageState.trigSlides) 
-            clearTimeout(pageState.hideSlide)
-            butText.innerText = "Resume"
-        }
-        else { 
-            pageState.trigSlides = setInterval(showSlides, 1700)
-            butText.innerText = "Pause" 
-            butText.style.color = 'initial' 
-        }
-    break
-    }
-    target[key] = value
-    return true;
-    }
-  })
-
-
-function menuState() { 
-   let sections = document.querySelectorAll('div.sect')
-   let l = sections.length - 1
-   sections.forEach( el => {
-    pTop = el.getBoundingClientRect().top
-    if (pTop > -5 && pTop < 50) {
-          stateProx.currTab = parseFloat( el.getAttribute('indx') )
-     }
-    })
-    if ( sections[l].getBoundingClientRect().bottom < (screen.height + 20) && sections[l].getBoundingClientRect().bottom > (screen.height-10) ) {
-        stateProx.currTab = l
-   }
-}
-
-
-pageState.trigSlides = setInterval(showSlides, 1700)
-
-
-function showSlides() {
-    let slideBox = document.getElementById('slide').querySelector('img')
-    if ( stateProx.currTab === 2 ) {
-        pageState.hideSlide = setTimeout( () => { slideBox.style.opacity = 0 }, 1400 )
-
-        if ( stateProx.currCourse === undefined || stateProx.currCourse === 3 ) stateProx.currCourse = 0
-        else stateProx.currCourse++
-    }
-}
-
 function fetchImgs() {
     let lateImgs = document.querySelectorAll('img')
     lateImgs.forEach( el => {
@@ -96,8 +87,7 @@ function fetchImgs() {
     })
 }
 
-
-window.addEventListener('load', function ( event ) {
+window.addEventListener('load', function(event) {
     if ( parseFloat(screen.width)  > 350 ) document.body.setAttribute('onscroll', 'menuState()')
     fetchImgs()
     }, false)
