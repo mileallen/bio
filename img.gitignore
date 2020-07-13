@@ -1,0 +1,12 @@
+# JPEG
+*.jpg
+*.jpeg
+
+# Graphics Interchange Format
+*.gif
+
+# Web P
+*.webp
+
+# Portable Network Graphics
+*.png
