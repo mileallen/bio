@@ -1,9 +1,8 @@
 
-const setState = (function pageVars(){
+const pageState = (function pageVars(){
     const page = document.querySelector('#page')
-    var iClose = function() {
-        var pageObj = {}
-        var stateProx = new Proxy( pageObj, {
+    return function() {
+        return new Proxy( {}, {
             set: function (target, key, value) {
             switch(key) {
             case 'pause':
@@ -23,19 +22,12 @@ const setState = (function pageVars(){
             break
             }
             target[key] = value
-            return true;
+            return true
             },
             get: function(target, key) {
                 if (key === 'tab' || key === 'slid') return page.dataset[key]
                 else return target[key]
-            }
-          })
-    return stateProx
-    }
-    return iClose
-})()
-
-const pageState = setState()
+            } }) } })()()
 
 
 function menuState() { 
