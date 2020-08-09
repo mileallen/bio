@@ -2,38 +2,43 @@
 const pageState = (function pageVars() {
 
     const o = {
-        page: document.querySelector('#page'),
-        lbl: document.getElementById('slide').querySelector('div.pause'),
-        scts: document.querySelectorAll('div.sect'),
-        ppt: document.getElementById('slide').querySelector('img'),
-        men: document.getElementById('menubox')
-        }
+        _page: document.querySelector('#page'),
+        _lbl: document.querySelector('div.pause'),
+        _scts: document.querySelectorAll('div.sect'),
+        _ppt: document.querySelector('#slide').querySelector('img'),
+        _men: document.querySelector('#menubox')
+    }
 
     return function () {
         return new Proxy(o, {
-            set: function (target, key, value) {
-                switch (key) {
+            set(t, k, v) {
+                switch (k) {
                     case 'pause':
-                        if (value) {
-                            clearInterval(target.trigSlides)
-                            clearTimeout(target.hideSlide)
-                            target.lbl.innerText = "Resume"
+                        if (v) {
+                            clearInterval(t._trigSlides)
+                            clearTimeout(t._hideSlide)
+                            t._lbl.innerText = "Resume"
                         }
                         else {
-                            target.trigSlides = setInterval(showSlides, 1700)
-                            target.lbl.innerText = "Pause"
-                            target.lbl.style.color = 'initial'
+                            t._trigSlides = setInterval(showSlides, 1700)
+                            t._lbl.innerText = "Pause"
+                            t._lbl.style.color = 'initial'
                         }
                         break
-                    case 'tab': case 'slid': target.page.dataset[key] = value
+                    case 'tab': t._page.dataset[k] = v
+                        break                    
+                    case 'slid':
+                        t._ppt.src = `img/slide-${v}.png`
+                        t._ppt.style.opacity = 1
+                        t._page.dataset[k] = v
                         break
                 }
-                target[key] = value
+                t[`_${k}`] = v
                 return true
             },
-            get: function (target, key) {
-                if (key === 'tab' || key === 'slid') return target.page.dataset[key]
-                else return target[key]
+            get(t, k) {
+                if (k === 'tab' || k === 'slid') return t._page.dataset[k]
+                else return t[`_${k}`]
             }
         })
     }
@@ -63,9 +68,6 @@ function showSlides() {
 
         if (pageState.slid === "3") pageState.slid = "0"
         else pageState.slid++
-
-        pageState.ppt.src = `img/slide-${pageState.slid}.png`
-        pageState.ppt.style.opacity = 1
     }
 }
 
@@ -80,10 +82,14 @@ function menuTog() {
 }
 
 function fetchImgs() {
-    let lateImgs = document.querySelectorAll('img')
+    let lateImgs = document.querySelectorAll('img'), late2 = []
     lateImgs.forEach(el => {
         if (el.getAttribute('late-src')) el.setAttribute('src', el.getAttribute('late-src'))
     })
+    for(i=1; i<4; i++) { 
+        late2[i] = new Image()
+        late2[i].src = `img/slide-${i}.png`
+    }
 }
 
 window.addEventListener('load', function (event) {
