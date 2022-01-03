@@ -1,0 +1,122 @@
+
+@keyframes animtext {
+  from {
+        letter-spacing: 0px;
+    }
+  to {
+        letter-spacing: -4px;
+    }
+}
+
+.animHead {
+animation-name: animtext; 
+animation-duration: 5s;
+animation-fill-mode: forwards;
+}
+.insBox {
+  opacity: 0;
+  transition: ease-in-out 0.5s;
+}
+#insImage {
+  width:100%; 
+  border: clamp( 0.2rem, calc(1vw + 3px), 1.2rem) solid #ffffff;
+}
+.credits{
+  padding-right: 2rem;
+  padding-bottom: 0.5rem;
+  padding-left: 2rem;
+}
+
+
+.siz1{
+  font-size: x-small;
+}
+.siz2{
+  font-size: small;
+}
+.siz3{
+  font-size: 1rem;
+}
+.siz4{
+  font-size: large;
+}
+.siz5{
+  font-size: x-large;
+}
+.siz6{
+  font-size: xx-large;
+}
+.siz7{
+  font-size: clamp(2rem, calc(4vw + 0.5rem), 5rem);
+}
+.sizBig{
+  font-size: clamp(2.5rem, calc(5vw + 1rem), 7rem);
+}
+.thin {
+  font-weight: 300;
+}
+.thinr {
+  font-weight: 100;
+}
+.thic {
+  font-weight: 700;
+}
+.lit {
+color: var(--liteMask);
+}
+.drk {
+color: var(--darkMask);
+}
+.spc {
+  letter-spacing: 0.25rem; 
+}
+.lin {
+  line-height: 3rem;
+}
+
+.dBut {
+  padding: 0.5rem;
+  margin: o.5rem;
+  border-radius: 0.33rem;
+  color: rgba(20, 20, 20, 0.6);
+  cursor: pointer;
+  transition: ease-in-out 0.3s;
+}
+.butBG {
+  background-color: rgba(20, 20, 20, 0.1); 
+}
+.butBG:hover {
+  background-color: rgba(255, 255, 255, 0.3); 
+}
+.brit:hover {
+filter: brightness(115%);
+}
+.dull:hover {
+  filter: brightness(75%);
+}
+
+
+input {
+  appearance: none;
+  border: none;
+}
+input:focus {
+  outline: none;
+}
+.inp {
+  font-size: 1.1rem;
+  padding: 0.5rem;
+  border-radius: 0.33rem;
+  background: var(--liteMask);
+}
+
+
+svg.sprite {
+  display: none;
+}
+.svg-icon {
+  width: 100%;
+  height: 100%;
+  fill: var(--clr1);
+  cursor: pointer;
+}

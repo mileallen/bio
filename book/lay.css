@@ -1,0 +1,116 @@
+:root{
+    --grey10: #e7e7e7;
+    --grey20: #adadad;
+    --grey30: #7a7a7a;
+    --grey40: #5a5a5a;
+    --grey50: #252525;
+    --darkMask: rgba(50, 50, 50, 0.5);
+    --liteMask: rgba(255, 255, 255, 0.5);
+    --clr1: #32cbff;
+    --clr2: #ffa500;
+    }
+
+html, body {
+    width: 100%;
+    height: 100%;
+    background-color: var(--grey40);
+    color: var(--grey10);
+    scroll-behavior: smooth;
+}
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+html, body, p, h1, h2, h3, h4, h5, article, aside, section {
+  margin: 0;
+  padding: 0;
+}
+a:link {
+    color: var(--liteMask);
+    text-decoration: none;
+  }
+a:hover {
+    filter: brightness(60%);
+}
+.main {
+    display: grid;
+    grid-template-columns: 1fr;
+  
+    font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Avenir, "Avenir Next", "Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
+}
+.sect {
+    padding: clamp(7%, 9vw, 10%);
+}
+.grd {
+    display: grid;
+    gap: clamp(0.8rem, 5vw, 1.5rem);
+    grid-template-columns: repeat(auto-fit, minmax(80vw, 1fr));
+}
+.spn2 {
+    grid-column: span 2;
+}
+.fRow {
+    display: flex;
+}
+.fCol {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.fRowC {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.fColC {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.gridTwit{
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 10% 1fr 10%;
+    align-items: center;
+}
+.relat {
+    position: relative;
+}
+.gapB2{
+    margin-bottom: 2rem;
+}
+.gapB1{
+    margin-bottom: 1rem;
+}
+.bg1 {
+background: var(--clr1);
+}
+.bg2{
+background: var(--clr2);
+}
+.bgW {
+    background: #ffffff;
+    color: var(--grey50);
+}
+.bgW a:link {
+    color: var(--darkMask);
+}
+.bgW a:hover {
+    filter: brightness(200%);
+}
+
+
+
+
+@media (min-width: 40em) {
+
+    .grd {
+        display: grid;
+        gap: clamp(2rem, 8vw, 4rem);
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+
+}
