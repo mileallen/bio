@@ -239,6 +239,7 @@ padding-left: 1rem;
 padding-right: 1rem;
 border-radius: 0.5rem;
 margin-bottom: 2rem;
+cursor: pointer;
 }
 
 #courses p {
@@ -274,7 +275,7 @@ margin-bottom: 2rem;
 
 #slide img {
   width: 100%;
-  opacity: 0;
+  opacity: 1;
   object-fit: contain;
   transition: ease-in-out 0.3s;
   border-radius: 1rem;
