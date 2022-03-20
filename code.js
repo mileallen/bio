@@ -1,15 +1,15 @@
 
-const pageState = (function pageVars() {
+const pageState = (function () {
 
     const o = {
         _page: document.querySelector('#page'),
         _lbl: document.querySelector('div.pause'),
         _scts: document.querySelectorAll('div.sect'),
         _ppt: document.querySelector('#slide').querySelector('img'),
-        _men: document.querySelector('#menubox')
+        _men: document.querySelector('#menubox'),
+        slid: -1,
     }
 
-    return function () {
         return new Proxy(o, {
             set(t, k, v) {
                 switch (k) {
@@ -25,12 +25,12 @@ const pageState = (function pageVars() {
                             t._lbl.style.color = 'initial'
                         }
                         break
-                    case 'tab': t._page.dataset[k] = v
+                    case 'tab': t._page.dataset.tab = v
                         break                    
                     case 'slid':
                         t._ppt.src = `img/slide-${v}.png`
                         t._ppt.style.opacity = 1
-                        t._page.dataset[k] = v
+                        t._page.dataset.slid = v
                         break
                 }
                 t[`_${k}`] = v
@@ -41,8 +41,7 @@ const pageState = (function pageVars() {
                 else return t[`_${k}`]
             }
         })
-    }
-})()()
+})()
 
 
 function menuState() {
@@ -63,12 +62,10 @@ pageState.trigSlides = setInterval(showSlides, 1700)
 
 
 function showSlides() {
-    if (pageState.tab === "2") {
         pageState.hideSlide = setTimeout(() => { pageState.ppt.style.opacity = 0 }, 1400)
 
-        if (pageState.slid === "3") pageState.slid = "0"
+        if (pageState.slid == "3") pageState.slid = "0"
         else pageState.slid++
-    }
 }
 
 function menuTog() {
@@ -86,11 +83,14 @@ function fetchImgs() {
     lateImgs.forEach(el => {
         if (el.getAttribute('late-src')) el.setAttribute('src', el.getAttribute('late-src'))
     })
-    for(i=1; i<4; i++) { 
-        late2[i] = new Image()
-        late2[i].src = `img/slide-${i}.png`
-    }
 }
+
+function setslide(j){
+    pageState.pause = true
+    pageState.slid = j
+}
+
+
 
 window.addEventListener('load', function (event) {
     if (parseFloat(screen.width) > 350) document.body.setAttribute('onscroll', 'menuState()')
