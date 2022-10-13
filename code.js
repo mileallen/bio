@@ -57,6 +57,7 @@ function menuState() {
     }
 }
 
+/*
 
 pageState.trigSlides = setInterval(showSlides, 1700)
 
@@ -67,6 +68,8 @@ function showSlides() {
         if (pageState.slid == "3") pageState.slid = "0"
         else pageState.slid++
 }
+*/
+
 
 function menuTog() {
     let men_ht = parseFloat(pageState.men.style.height)
@@ -86,7 +89,7 @@ function fetchImgs() {
 }
 
 function setslide(j){
-    pageState.pause = true
+    //pageState.pause = true
     pageState.slid = j
 }
 
