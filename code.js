@@ -86,7 +86,7 @@ function fetchImgs() {
     lateImgs.forEach(el => {
         if (el.getAttribute('late-src')) el.setAttribute('src', el.getAttribute('late-src'))
     })
-        for(i=1; i<4; i++) { 
+        for(i=1; i<5; i++) { 
         late2[i] = new Image()
         late2[i].src = `img/slide-${i}.png`
     }
