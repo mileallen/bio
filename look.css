@@ -240,6 +240,11 @@ padding-right: 1rem;
 border-radius: 0.5rem;
 margin-bottom: 2rem;
 cursor: pointer;
+border: 1px solid transparent;
+}
+
+#courses span:hover {
+  border: 1px solid #ffeb3c2e;
 }
 
 #courses p {
@@ -282,6 +287,18 @@ cursor: pointer;
   overflow: hidden;
 }
 
+
+@keyframes fades {
+  0% {opacity: 1;}
+  50% {opacity: 0;}
+  100% {opacity: 1;}
+}
+
+.transit {
+  animation: fades 0.7s;
+}
+
+
 .foot {
 padding: clamp(1%, 3vw, 4%);
 display: flex;
@@ -299,12 +316,13 @@ font-size: 0.7rem;
     transition: ease-in-out 0.3s;
 }
 
-.main[data-slid="0"] #c0, .main[data-slid="1"] #c1, .main[data-slid="2"] #c2, .main[data-slid="3"] #c3 
+.main[data-slid="0"] #c0, .main[data-slid="1"] #c1, .main[data-slid="2"] #c2, .main[data-slid="3"] #c3, .main[data-slid="4"] #c4
 {
     color: var(--grey50);
     background-color: #ffeb3c26; /* var(--clrYellow)*/
     transition: ease-in-out 0.3s;
 }
+
 
 
 @media (min-width: 40em) {
