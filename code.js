@@ -28,8 +28,11 @@ const pageState = (function () {
                     case 'tab': t._page.dataset.tab = v
                         break                    
                     case 'slid':
-                        t._ppt.src = `img/slide-${v}.png`
-                        t._ppt.style.opacity = 1
+                        t._ppt.classList.add("transit")                        
+                        setTimeout(() => {
+                            t._ppt.src = `img/slide-${v}.png`
+                            t._ppt.classList.remove("transit")
+                        }, 350)
                         t._page.dataset.slid = v
                         break
                 }
