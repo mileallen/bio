@@ -39,7 +39,7 @@ a:link {
   }
 
 a:hover {
-    color: #ffffff;
+    color: var(--grey40);
 }
   
 .main {
@@ -125,15 +125,12 @@ font-size: clamp(1.1rem, calc( 1vw + 10px ), 2.2rem);
   }
  
 .works{
-
-    background-color: var(--greyRight);
-    grid-template-columns: 1fr;
-
-    display: grid;
-    grid-gap: 1em;
-  
-    align-items: center;
-  }
+  background-color: var(--greyRight);
+  grid-template-columns: 1fr;
+  display: grid;
+  grid-gap: 0;
+  align-items: center;
+}
   
 .sect {
   padding: clamp(7%, 9vw, 10%);
@@ -175,6 +172,34 @@ svg.sprite {
 #writ, #book {
   background-color: var(--grey10);
   color: var(--grey50);
+}
+
+
+
+form, .beforeForm {
+  display: inline;
+}
+
+
+input, button {
+  appearance: none;
+  border: none;
+  border-radius: 10%;
+  background-color: var(--grey20);
+  color: var(--grey40);
+}
+
+input:focus {
+  outline: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: var(--grey40);
+  color: var(--grey20);
 }
 
 .pieces {
