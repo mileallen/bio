@@ -154,6 +154,14 @@ margin-bottom: 2rem;
   margin-top: 1rem;
 }
 
+
+.yt iframe {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  border: black solid 1vmin;
+}
+
+
 svg.sprite {
   display: none;
 }
