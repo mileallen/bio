@@ -3,54 +3,39 @@ const pageState = (function () {
 
     const o = {
         _page: document.querySelector('#page'),
-        _scts: document.querySelectorAll('div.sect'),
-        _ppt: document.querySelector('#slide').querySelector('img'),
+        _works: document.querySelector('.works'),
         _men: document.querySelector('#menubox'),
-        _slid: -1,
+        _slid: 0,
         set_pause: function (v) { return true // do nothing
         },
-        set_slid: function (v){
-                        this._ppt.classList.add("transit")                        
-                        setTimeout(() => {
-                            this._ppt.src = `img/slide-${v}.png`
-                            this._ppt.classList.remove("transit")
-                        }, 350)
-        }
+        set_slid: function (v){ [this._slid, v].forEach( (i,key) => document.getElementById(`sld${i}`).style.opacity = key ) }
     }
-        return new Proxy(o, {
-            set(t, k, v) {
-                if ( `set_${k}` in t ) t[`set_${k}`](v)
-                t._page.dataset[k] = v
-                t[`_${k}`] = v
-                return true
-            },
-            get(t, k) { return t[`_${k}`] }
-        })
+    return new Proxy(o, {
+        set(t, k, v) {
+            if ( `set_${k}` in t ) t[`set_${k}`](v)
+            t._page.dataset[k] = v
+            t[`_${k}`] = v
+            return true
+        },
+        get(t, k) { return t[`_${k}`] }
+    })
 })()
 
 function menuState() {
-    let l = document.querySelector('.works'), h = window.innerHeight, s
-    s = document.elementFromPoint( l.offsetLeft + 10, Math.floor(h/3) )
+    let h = window.innerHeight, s
+    s = document.elementFromPoint( pageState.works.offsetLeft + 10, Math.floor(h/3) )
     pageState.tab = s.getAttribute('indx')
 }
 
 function menuTog() {
-    let men_ht = parseFloat(pageState.men.style.height)
+    const men_ht = parseFloat(pageState.men.style.height)
     pageState.men.style.height = !men_ht ? '15rem' : '0rem'
 }
 
 function fetchImgs() {
-    let lateImgs = document.querySelectorAll('img'), late2 = []
-    lateImgs.forEach(el => {
-        if (el.getAttribute('late-src')) el.setAttribute('src', el.getAttribute('late-src'))
-    })
-        for(i=1; i<5; i++) { 
-        late2[i] = new Image()
-        late2[i].src = `img/slide-${i}.png`
-    }
+    const lateImgs = document.querySelectorAll('img')
+    lateImgs.forEach(el => { if (el.hasAttribute('data-lateimg')) el.setAttribute('src', el.getAttribute('data-lateimg')) } )
 }
-
-
 
 window.addEventListener('load', function (event) {
     if (parseFloat(screen.width) > 350) document.body.setAttribute('onscroll', 'menuState()')

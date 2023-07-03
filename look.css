@@ -154,11 +154,29 @@ margin-bottom: 2rem;
   margin-top: 1rem;
 }
 
+.maintext {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
 
-.yt iframe {
-  aspect-ratio: 16 / 9;
-  width: 100%;
-  border: black solid 1vmin;
+.yt {
+  font-size: smaller;
+  color: var(--grey50);
+  padding-top: 1rem;
+  border-top: 5px solid var(--greyLeft);
+  padding-left:0;
+  border-left: none;
+}
+
+.yt img {
+  margin-top: 1rem;
+  filter: grayscale(100%);
+  width: 70%
+}
+
+.yt img:hover {
+  filter: none;
 }
 
 
@@ -214,7 +232,7 @@ button:hover {
   margin: 2rem;
 display: grid;
 gap: 1rem;
-grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
 }
 
 
@@ -284,52 +302,27 @@ border: 1px solid transparent;
   margin-bottom: 0.8rem;
 }
 
-#slide {
-  position: relative;
+
+.slidebox {
   margin-top: 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-end;
   background-color: var(--grey40);
   padding: clamp(0.2rem, calc(1vw+5px), 1rem);
   border-radius: 1rem;
+  display: grid;
+  grid-template-columns: auto;
+  /* justify-content: start; */
+  /* width: 100%; */
 }
 
-.pause {
-  position: absolute;
-  top: clamp(0.2rem, calc(1vw+5px), 1rem);
-  right: clamp(0.2rem, calc(1vw+5px), 1rem);
-  z-index: 2;
-  width: 3rem;
-  text-align: center;
-  color: var(--grey50);
-  font-size: 0.7rem;
-  background-color: var(--liteMask);
-  padding: 0.2rem;
-  border-radius: 0.3rem;
-  cursor: pointer;
-}
-
-#slide img {
+.slidebox img {
+  grid-area: 1 / 2;
   width: 100%;
-  opacity: 1;
   object-fit: contain;
-  transition: ease-in-out 0.3s;
+  transition: ease-in-out 1s;
   border-radius: 1rem;
   overflow: hidden;
 }
 
-
-@keyframes fades {
-  0% {opacity: 1;}
-  50% {opacity: 0;}
-  100% {opacity: 1;}
-}
-
-.transit {
-  animation: fades 0.7s;
-}
 
 
 .foot {
@@ -381,6 +374,23 @@ font-size: 0.7rem;
 
   .menu {
       height: fit-content;
+  }
+
+  .maintext {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: minmax(75%, 1fr) minmax(25%, 1fr);
+  }
+
+  .yt {
+    padding-top: 0;   
+    border-top: none;
+    padding-left: 1rem;
+    border-left: 5px solid var(--greyLeft);
+  }
+
+  .yt img {
+  width: 90%
   }
 
 }
