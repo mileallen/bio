@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#be1818">
+    <title>reach wry</title>
+    <meta name="description" content="Just a little app to communicate without exchanging contacts.">
+
+    <link rel="stylesheet" href="./game.css">
+
+</head>
+
+
+<body>
+
+<div id="wikip" class="main">
+
+<header> 
+        <div>
+        <div class="title" style="line-height: 0.9;">reach wry</div>
+        </div>
+        <div style="padding-top: 5vmin;"> 
+            There are no notifications. You can change the frequency of checks for new messages below, 
+            between once every minute and every 10 minutes.
+        </div>
+    
+        <div>
+    
+        <input id="freq" type="range" min="1" max="10" value="1"></input>
+        <div id="num" style="font-size:1.4em">1</div>
+        
+        </div>
+
+    
+</header>
+
+<div class="gamearea">
+
+        <div id="lines" class="grid">
+    
+            <div class="msgline"> </div>
+            <div class="msgline"> </div>
+            <div class="msgline"> </div>
+            <div class="msgline"> </div>
+            <div class="msgline"> </div>
+            <div class="msgline"> </div>
+            <div class="msgline"> </div>
+            <div class="msgline"> </div>
+            <div class="msgline"> </div>
+            <div class="msgline"> </div>
+
+    
+        </div>
+
+        <div style="margin: 1em">
+
+            <input id="nom" type="text" class="inps" size="10" width="50%" placeholder="your name"></input>
+        
+            <div class="msgbox">
+        
+                <textarea id="msginp" width="90%" cols="30" rows="4" resize="none" placeholder="message"></textarea>
+        
+                <div id="sendbut" style="cursor: pointer" onclick="onsend()">
+                    <svg width="50px" height="50px" viewBox="0 0 24 24"><path d="M21.66,12a2,2,0,0,1-1.14,1.81L5.87,20.75A2.08,2.08,0,0,1,5,21a2,2,0,0,1-1.82-2.82L5.46,13H11a1,1,0,0,0,0-2H5.46L3.18,5.87A2,2,0,0,1,5.86,3.25h0l14.65,6.94A2,2,0,0,1,21.66,12Z" style="fill:#1e2740"></path></svg>
+                </div>
+        
+            </div>
+
+        </div>
+
+            
+    <div class="foot" style="flex: initial; align-self: flex-end; width:100%;">
+
+        <p style="font-size: 0.9rem; line-height: 1rem; margin-left: auto; margin-right: auto; width:80%; text-align: center;">
+            &copy; 2023 <a href="https://twitter.com/sachwry">Sach Wry</a></p>
+    </div>
+            
+</div>
+
+<footer>
+
+    <h3> Note </h3>
+
+    <p>
+        Messages that you send appear pale intially. After the next sync with the server, 
+        the messages turn your assigned color and appear in proper chronology. If someone else texted 
+        in the interim period, on sync, their message may appear above the ones you "just" sent.
+        
+    </p>
+    
+</footer>
+
+
+<script async type="text/javascript" src="./logic.js"></script>
+
+
+</body>
+
+</html>
