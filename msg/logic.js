@@ -19,41 +19,32 @@ const wsstart = async function () {
         if(currentData.msg) console.log(currentData.msg)   
             
         else {
-            const lines = h.qSelA('.msgline')
-            //currentData.letts.sort( (x,y) => x.time - y.time )
-        
-            h.recent = currentData.letts.length > 10 ? currentData.letts.slice(0,10) : currentData.letts
-    
-            h.recent.forEach( (l,i) => {
-              if(l.sndr === h.name) lines[i].style.color = "var(--ownColor)" 
-              lines[i].style.visibility = "visible"
-              lines[i].style.opacity = 1
-              lines[i].innerHTML = `${l.sndr}: ${l.txt}` 
-            } )    
-        //console.log(currentData)
+            h.recent = currentData.letts   //.length > 10 ? currentData.letts.slice(0,10) : currentData.letts
+            fillup()
         }
     })
     h.socket.addEventListener("error", (event) => { console.log("WebSocket error: ", event)  })
-    console.log('started')
+    h.socket.addEventListener("open", () => { console.log("Socket now open.")  })
 }
-
 const onsend = function ()  {
-
-    const newtxt = h.getel('msginp')
     h.name = h.getel('nom').value || h.name
+    const newtxt = h.getel('msginp')
 
-    h.send( { sndr: h.name, txt: newtxt.value, ip:'', time:''} )
+    //h.send( { sndr: h.name, txt: newtxt.value} )
+    h.recent.push( { sndr: h.name, txt: newtxt.value, fresh: true} )
+    newtxt.value = ''
+    fillup(true)
+}
+const fillup = (end=false) => {
 
-    const l = h.recent.length
-    h.recent.push({ sndr: h.name, txt: newtxt.value, ip:'', time:''})
     const lines = h.qSelA('.msgline')
 
-    lines[l].style.visibility = "visible"
-    lines[l].style.opacity = 0.4
-    lines[l].innerHTML = `${h.name}: ${newtxt.value}`
-    newtxt.value = ''
+    h.recent.forEach( (l,i) => {
+      if(!end && l.sndr === h.name) lines[i].style.color = "var(--ownColor)" 
+      lines[i].style.opacity = l.fresh ? 0.4 : 1
+      lines[i].innerHTML = `${l.sndr}: ${l.txt}` 
+    } )
 }
-
 const close = () => h.socket.close()
 
 const nightday = () => document.body.dataset.theme = document.body.dataset.theme === 'dark' ? '' : 'dark'

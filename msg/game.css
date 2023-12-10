@@ -120,7 +120,6 @@ footer > * {
          box-shadow: none;
          margin: 0.1em;
          width: 80%;
-         visibility: hidden;
 }
 
 input {
