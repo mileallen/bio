@@ -7,7 +7,6 @@ const h = {
     recent: [],
 }
 
-
 const wsstart = async function () {
 
     h.socket = await new WebSocket('wss://ww.wry.workers.dev')
@@ -26,20 +25,17 @@ const wsstart = async function () {
             h.recent = currentData.letts.length > 10 ? currentData.letts.slice(0,10) : currentData.letts
     
             h.recent.forEach( (l,i) => {
-              if(l.sndr === h.name) lines[i].style.color = "#74b7ff5c"
+              if(l.sndr === h.name) lines[i].style.color = "var(--ownColor)" 
               lines[i].style.visibility = "visible"
               lines[i].style.opacity = 1
               lines[i].innerHTML = `${l.sndr}: ${l.txt}` 
             } )    
-        console.log(currentData)
+        //console.log(currentData)
         }
     })
-    h.socket.addEventListener("error", (event) => {
-  console.log("WebSocket error: ", event);
-    })
+    h.socket.addEventListener("error", (event) => { console.log("WebSocket error: ", event)  })
     console.log('started')
 }
-
 
 const onsend = function ()  {
 
@@ -47,8 +43,6 @@ const onsend = function ()  {
     h.name = h.getel('nom').value || h.name
 
     h.send( { sndr: h.name, txt: newtxt.value, ip:'', time:''} )
-
-    //setTimeout( () => { h.send( {get:true} )}, 5000 )
 
     const l = h.recent.length
     h.recent.push({ sndr: h.name, txt: newtxt.value, ip:'', time:''})
@@ -62,6 +56,7 @@ const onsend = function ()  {
 
 const close = () => h.socket.close()
 
+const nightday = () => document.body.dataset.theme = document.body.dataset.theme === 'dark' ? '' : 'dark'
 
 window.addEventListener('load', wsstart )
 

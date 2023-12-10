@@ -1,13 +1,26 @@
 :root{
     font-size: calc(1vmin + 7px);
-    --pageBG: #1e2740;
-    --gameBG: #263252;
+    --pageBG: #c4c4c4;
+    --gameBG: #ffffff;
+   --msgColor: #5a5a5a;
+   --txtColor: #0000009e;
+   --ownColor: #4860b6;
+   --hoverN: 60%;
 }
 
 html, body {
-    width: 97vw;
-    height: 97vh;
+   height:100vh;
+   margin:0;
     background-color: var(--pageBG);
+}
+
+[data-theme="dark"] {
+    --pageBG: #263252;
+    --gameBG: #1e2740;
+   --msgColor: #b9cdff70;
+   --txtColor: #ffffff45;
+   --ownColor: #5385ff70;
+      --hoverN: 140%;
 }
 
 .main {
@@ -28,6 +41,17 @@ header > div, header > input {
     margin: 2vmin;
    padding: 0.8vmin;
    justify-content: center;
+}
+
+.themebut{
+   cursor:pointer;
+   background-color: var(--gameBG);
+   border-radius: 1em;
+   width: 50%;
+}
+
+.themebut:hover, #sendbut:hover {
+   filter: brightness(var(--hoverN));
 }
 
 .gamearea {
@@ -74,40 +98,34 @@ color: var(--pageBG);
 text-decoration: none; 
 }
 
-footer {
+footer, header {
     display: flex;
     flex-direction: column;
-}
-
-footer, header {
-    color: #b7b7b75c;
+   align-items: center;
+   color: var(--txtColor);
     font-size: 0.9rem;
-    padding-bottom: 1.5rem;	
+    padding-bottom: 1.5rem;
 }
 
 footer > * {
     margin: clamp(2em, 20px, 3em) clamp(2em, 20px, 3em) 0 clamp(2em, 20px, 3em);
 }
 
-
-
 .msgline{
          font-size: 1em;
-         color: #ffffff5c;
-         background-color: #263252a1;
+         color: var(--msgColor);
          border-radius: 0.3em;
-         /* text-align: center; */
          border: none;
          appearance: unset;
          box-shadow: none;
          margin: 0.1em;
          width: 80%;
-         visibility:hidden;
+         visibility: hidden;
 }
 
 input {
    background-color: transparent;
-   color: #3c4869;
+   color: var(--msgColor);
 }
 
 
@@ -122,33 +140,12 @@ input.inps, textarea{
 
 textarea {
    resize: none;
-   background-color: #3c4869;
-   color: var(--pageBG);
+   background-color: var(--pageBG);
+   color: var(--msgColor);
 }
 
 input.inps:active, input.inps:focus, input.inps:hover, textarea:active, textarea:focus, textarea:hover{
 outline: 0;
-}
-
-.disab {
-pointer-events: none;
-/* filter: grayscale(1);
-opacity: 0.5; */
-}
-
-.enab {
-pointer-events: all;
-color: black;
-/*filter: none;
-opacity: 1.0; */
-}
-
-.noClick {
-pointer-events: none;
-}
-
-.unseen {
-visibility: hidden;
 }
 
 
