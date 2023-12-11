@@ -36,12 +36,12 @@ const onsend = function ()  {
     h.recent = h.recent.slice(-9)
     fillup(true)
 }
-const fillup = (end=false) => {
+const fillup = (client=false) => {
 
     const lines = h.qSelA('.msgline')
     
     h.recent.forEach( (l,i) => {
-      if(!end && l.sndr === h.name) lines[i].style.color = "var(--ownColor)" 
+      lines[i].style.color = !client && (l.sndr === h.name) ? "var(--ownColor)" : "var(--msgColor)"
       lines[i].style.opacity = l.fresh ? 0.4 : 1
       lines[i].innerHTML = `${l.sndr}: ${l.txt}` 
     } )
