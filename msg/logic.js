@@ -30,15 +30,16 @@ const onsend = function ()  {
     h.name = h.getel('nom').value || h.name
     const newtxt = h.getel('msginp')
 
-    //h.send( { sndr: h.name, txt: newtxt.value} )
+    h.send( { sndr: h.name, txt: newtxt.value} )
     h.recent.push( { sndr: h.name, txt: newtxt.value, fresh: true} )
     newtxt.value = ''
+    h.recent = h.recent.slice(-9)
     fillup(true)
 }
 const fillup = (end=false) => {
 
     const lines = h.qSelA('.msgline')
-
+    
     h.recent.forEach( (l,i) => {
       if(!end && l.sndr === h.name) lines[i].style.color = "var(--ownColor)" 
       lines[i].style.opacity = l.fresh ? 0.4 : 1
