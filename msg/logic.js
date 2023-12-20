@@ -1,7 +1,8 @@
 
 const h = {
-    getel: el => document.getElementById(el),
-    qSelA: el => document.querySelectorAll(el),
+    nameInp: document.getElementById('nom'),
+    newtxt: document.getElementById('msginp'),
+    lines: document.querySelectorAll('.msgline'),
 
     name: 'anon',
     recent: [],
@@ -16,10 +17,12 @@ const wsstart = async function () {
 
         const currentData = JSON.parse(data)
     
-        if(currentData.msg) console.log(currentData.msg)   
+        if(currentData.msg) console.log(currentData.msg)
+
+        else if(currentData.err) h.newtxt.value = currentData.err
             
         else {
-            h.recent = currentData.letts   //.length > 10 ? currentData.letts.slice(0,10) : currentData.letts
+            h.recent = currentData.letts
             fillup()
         }
     })
@@ -27,23 +30,20 @@ const wsstart = async function () {
     h.socket.addEventListener("open", () => { console.log("Socket now open.")  })
 }
 const onsend = function ()  {
-    h.name = h.getel('nom').value || h.name
-    const newtxt = h.getel('msginp')
+    h.name = h.nameInp.value || h.name
 
-    h.send( { sndr: h.name, txt: newtxt.value} )
-    h.recent.push( { sndr: h.name, txt: newtxt.value, fresh: true} )
-    newtxt.value = ''
+    h.send( { sndr: h.name, txt: h.newtxt.value} )
+    h.recent.push( { sndr: h.name, txt: h.newtxt.value, fresh: true} )
+    h.newtxt.value = ''
     h.recent = h.recent.slice(-9)
-    fillup(true)
+    fillup()
 }
-const fillup = (client=false) => {
+const fillup = () => {
 
-    const lines = h.qSelA('.msgline')
-    
     h.recent.forEach( (l,i) => {
-      lines[i].style.color = !client && (l.sndr === h.name) ? "var(--ownColor)" : "var(--msgColor)"
-      lines[i].style.opacity = l.fresh ? 0.4 : 1
-      lines[i].innerHTML = `${l.sndr}: ${l.txt}` 
+      h.lines[i].style.color = l.fresh ? "var(--msgColor)" :    l.sndr === h.name ? "var(--ownColor)" : "var(--msgColor)"
+      h.lines[i].style.opacity = l.fresh ? 0.4 : 1
+      h.lines[i].innerHTML = `${l.sndr}: ${l.txt}` 
     } )
 }
 const close = () => h.socket.close()
