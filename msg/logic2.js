@@ -1,5 +1,5 @@
 
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'
+//import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'
 
 const h = {
     nameInp: document.getElementById('nom'),
@@ -14,8 +14,8 @@ const supabaseUrl = 'https://pbxoimxzogrwtadntrfr.supabase.co'
 
 var supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBieG9pbXh6b2dyd3RhZG50cmZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDkyMDIyNDAsImV4cCI6MjAyNDc3ODI0MH0.kjEUHI7Q7QUCf5_3WMEz2slOKlmP9EBBOyII1CT0_Sg'
 
-//const sb = supabase.createClient(supabaseUrl, supabaseKey)
-const sb = createClient(supabaseUrl, supabaseKey)
+const sb = supabase.createClient(supabaseUrl, supabaseKey)
+//const sb = createClient(supabaseUrl, supabaseKey)
 
 const chann = sb.channel('room1')
 
