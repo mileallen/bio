@@ -1,5 +1,5 @@
 
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from 'supabase-js'
 
 const h = {
     nameInp: document.getElementById('nom'),
