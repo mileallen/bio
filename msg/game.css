@@ -18,8 +18,8 @@ html, body {
     --pageBG: #263252;
     --gameBG: #1e2740;
    --msgColor: #b9cdff70;
-   --txtColor: #ffffff45;
-   --ownColor: #5385ff70;
+   --txtColor: #ffffff82;
+   --ownColor: #5385ffa6;
       --hoverN: 140%;
 }
 
@@ -101,8 +101,8 @@ text-decoration: none;
 footer, header {
     display: flex;
     flex-direction: column;
-   align-items: center;
-   color: var(--txtColor);
+    align-items: center;
+    color: var(--txtColor);
     font-size: 0.9rem;
     padding-bottom: 1.5rem;
 }
