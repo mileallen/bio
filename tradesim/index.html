@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Trade Simulation</title>
+        <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap" rel="stylesheet"> -->
+        <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+        <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+        <style>
+            :root {
+                --bg-primary: #1a1a1a;
+                --bg-secondary: #2a2a2a;
+                --bg-tertiary: #353535;
+                --text-primary: #e8e8e8;
+                --text-secondary: #b8b8b8;
+                --text-muted: #888888;
+                --border: #404040;
+                --accent-light: #d4a574;
+                --accent: #c49060;
+                --accent-dark: #a67c52;
+                --sepia: #8b7355;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                background: var(--bg-primary);
+                color: var(--text-primary);
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
+                line-height: 1.6;
+                padding: 20px;
+            }
+
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                background: var(--bg-secondary);
+                padding: 40px;
+                border-radius: 12px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            }
+
+            h1 {
+                color: var(--text-primary);
+                margin-bottom: 30px;
+                font-weight: 600;
+                font-size: 1.8em;
+            }
+
+            h2 {
+                color: var(--text-primary);
+                margin: 30px 0 15px;
+                font-size: 1.3em;
+                font-weight: 500;
+            }
+
+            .login-form {
+                max-width: 400px;
+                margin: 50px auto;
+            }
+
+            input[type="text"], input[type="number"] {
+                width: 100%;
+                padding: 10px 14px;
+                margin: 8px 0;
+                border: 1.5px solid var(--border);
+                border-radius: 6px;
+                font-size: 15px;
+                background: var(--bg-tertiary);
+                color: var(--text-primary);
+                transition: border-color 0.2s;
+            }
+
+            input[type="text"]:focus, input[type="number"]:focus {
+                outline: none;
+                border-color: var(--accent);
+            }
+
+            button {
+                background: var(--accent);
+                color: var(--bg-primary);
+                padding: 10px 20px;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 15px;
+                margin: 5px 5px 5px 0;
+                font-weight: 500;
+                transition: background 0.2s;
+            }
+
+            button:hover {
+                background: var(--accent-light);
+            }
+
+            button:disabled {
+                background: var(--border);
+                cursor: not-allowed;
+                opacity: 0.5;
+            }
+
+            button.danger {
+                background: #6b4a3a;
+            }
+
+            button.danger:hover {
+                background: #5a3d2e;
+            }
+
+            button.small {
+                padding: 6px 12px;
+                font-size: 13px;
+            }
+
+            .student-status {
+                font-size: 1.8em;
+                padding: 25px;
+                background: var(--bg-tertiary);
+                border-radius: 10px;
+                margin-bottom: 30px;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                border: 1px solid var(--border);
+            }
+
+            .student-status div {
+                text-align: center;
+            }
+
+            .student-status label {
+                display: block;
+                font-size: 0.5em;
+                color: var(--text-muted);
+                margin-bottom: 5px;
+                font-weight: 400;
+            }
+
+            .my-items {
+                background: var(--bg-tertiary);
+                padding: 20px;
+                border-radius: 10px;
+                margin-bottom: 25px;
+                border: 1px solid var(--border);
+            }
+
+            .my-items .item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin: 12px 0;
+                padding: 12px;
+                background: var(--bg-secondary);
+                border-radius: 6px;
+                border: 1px solid var(--border);
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+                background: var(--bg-secondary);
+            }
+
+            th, td {
+                padding: 12px;
+                text-align: left;
+                border-bottom: 1px solid var(--border);
+            }
+
+            th {
+                background: var(--bg-tertiary);
+                color: var(--text-primary);
+                font-weight: 500;
+                border-bottom: 2px solid var(--border);
+            }
+
+            tr:hover {
+                background: var(--bg-tertiary);
+            }
+
+            .progress {
+                background: var(--bg-tertiary);
+                padding: 20px;
+                border-radius: 10px;
+                margin: 20px 0;
+                border: 1px solid var(--border);
+            }
+
+            .progress-item {
+                display: flex;
+                justify-content: space-between;
+                margin: 10px 0;
+                padding: 8px 0;
+            }
+
+            .students-list {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 12px;
+                margin: 20px 0;
+            }
+
+            .student-card {
+                padding: 12px;
+                background: var(--bg-tertiary);
+                border-radius: 6px;
+                border: 1px solid var(--border);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .timestamp {
+                font-size: 0.85em;
+                color: var(--text-muted);
+            }
+
+            .phase-indicator {
+                background: var(--accent);
+                color: var(--bg-primary);
+                padding: 10px 20px;
+                border-radius: 6px;
+                display: inline-block;
+                margin-bottom: 25px;
+                font-weight: 500;
+            }
+
+            .modal-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0,0,0,0.7);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+            }
+
+            .modal {
+                background: var(--bg-secondary);
+                padding: 30px;
+                border-radius: 12px;
+                max-width: 600px;
+                max-height: 80vh;
+                overflow-y: auto;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+                border: 1px solid var(--border);
+            }
+
+            .modal h2 {
+                margin-top: 0;
+                color: var(--text-primary);
+            }
+
+            .items-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                margin: 20px 0;
+            }
+
+            .items-grid input {
+                margin: 0;
+            }
+
+            .waiting-message {
+                text-align: center;
+                padding: 40px;
+                color: var(--text-secondary);
+            }
+
+            .debrief-section {
+                margin: 30px 0;
+                padding: 20px;
+                background: var(--bg-tertiary);
+                border-radius: 10px;
+                border: 1px solid var(--border);
+            }
+
+            .debrief-section h3 {
+                color: var(--text-primary);
+                margin-bottom: 15px;
+                font-size: 1.1em;
+            }
+
+            .upload-area {
+                padding: 40px;
+                border: 2px dashed var(--border);
+                border-radius: 8px;
+                text-align: center;
+                cursor: pointer;
+                transition: border-color 0.2s;
+            }
+
+            .upload-area:hover {
+                border-color: var(--accent);
+            }
+
+            .upload-area input[type="file"] {
+                display: none;
+            }
+
+            footer {
+                text-align: center;
+                padding: 30px 20px;
+                color: var(--text-muted);
+                font-size: 0.9em;
+                margin-top: 40px;
+            }
+
+            header {
+                text-align: center;
+                /* Font Family Stack */
+                /*font-family: 'Inter', 'Segoe UI Light', 'Segoe UI', Tahoma, Arial, sans-serif;*/
+                font-family: 'Segoe UI Light', 'Segoe UI', Tahoma, Arial, sans-serif;
+                /* Styling for Elegance */
+                font-weight: 300;
+                font-size: 2.5rem;
+                letter-spacing: -0.01em;
+                /* Subtle tightening for that premium look */
+                color: var(--accent);
+                /* Optional: Clean spacing */
+                padding: 20px 0;
+                margin-bottom: 20px;
+                /* border-bottom: 1px solid #eee; */
+            }
+        </style>
+    </head>
+    <body>
+        <header>Microeconomics in-class Simulation</header>
+        <div id="tradesim" class="container" x-data="tradeApp()" x-init="init()">
+            <!-- Login Screen -->
+            <template x-if="!currentStudent && !isBrief && !isDebrief">
+                <div class="login-form">
+                    <h1>Student Interface</h1>
+                    <input type="text" x-model="studentName" placeholder="Enter your name" @keyup.enter="joinSession()">
+                    <button @click="joinSession()" :disabled="!studentName.trim()">Join Session</button>
+                </div>
+            </template>
+            <!-- Professor Interface -->
+            <template x-if="isBrief">
+                <div>
+                    <h1>Professor Control Panel</h1>
+                    <div class="phase-indicator" x-text="'Current Phase: ' + phase.toUpperCase()"></div>
+                    <div class="progress">
+                        <h2>Progress Tracking</h2>
+                        <div class="progress-item">
+                            <span>Students Joined:</span>
+                            <span x-text="Object.keys(students).length"></span>
+                        </div>
+                        <div class="progress-item" x-show="phase === 'pricing'">
+                            <span>Items Priced:</span>
+                            <span x-text="getPricedItemsCount() + ' / ' + (Object.keys(students).length * 2)"></span>
+                        </div>
+                        <div class="progress-item" x-show="phase === 'bidding'">
+                            <span>Students Who Bid:</span>
+                            <span x-text="getStudentsWhoBid() + ' / ' + Object.keys(students).length"></span>
+                        </div>
+                    </div>
+                    <div style="margin: 20px 0;">
+                        <button @click="showItemModal = true">Edit Item List
+                </button>
+                        <button @click="allocateItems()" :disabled="phase !== 'waiting' || Object.keys(students).length === 0 || masterItems.length === 0">Allocate Items
+                </button>
+                        <button @click="broadcastPrices()" :disabled="phase !== 'pricing' || getPricedItemsCount() < Object.keys(students).length * 2">Broadcast Prices
+                </button>
+                        <button @click="publishBids()" :disabled="phase !== 'bidding' || getStudentsWhoBid() < Object.keys(students).length">Publish Bids
+                </button>
+                        <button @click="executeTrades()" :disabled="phase !== 'bids_published'">Execute Trades
+                </button>
+                        <button @click="downloadSessionData()">Download Session Data (JSON)</button>
+                        <button @click="resetSession()" class="danger">Reset Session</button>
+                    </div>
+                    <h2>Students</h2>
+                    <div class="students-list">
+                        <template x-for="(student, id) in students" :key="id">
+                            <div class="student-card">
+                                <div>
+                                    <strong x-text="student.name"></strong>
+                                    <div x-show="student.items">
+                                        <small style="color: var(--text-secondary);">
+                                            Items: <span x-text="student.items ? student.items.length : 0"></span>
+                                        </small>
+                                    </div>
+                                </div>
+                                <button @click="ejectStudent(id)" class="danger small">Eject</button>
+                            </div>
+                        </template>
+                    </div>
+                    <h2>All Items</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Intial Owner</th>
+                                <th>Final Owner</th>
+                                <th>Price</th>
+                                <th>Bids</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template x-for="(item, id) in items" :key="id">
+                                <tr>
+                                    <td x-text="item.name"></td>
+                                    <td x-text="students[item.initialOwner]?.name || 'Unknown'"></td>
+                                    <td x-text="students[item.finalOwner]?.name || 'Unknown'"></td>
+                                    <td x-text="item.price ? '€' + item.price : '-'"></td>
+                                    <td>
+                                        <template x-if="bids[id] && Object.keys(bids[id]).length > 0">
+                                            <div>
+                                                <template x-for="(bid, studentId) in bids[id]" :key="studentId">
+                                                    <div>
+                                                        <span x-text="students[studentId]?.name"></span>
+                                                        : 
+                                                €<span x-text="bid.amount" :style="bid.amount === item.highestBid ? 'color: var(--accent-light)' : 'color: #bf616a'"></span>
+                                                        <span class="timestamp" x-text="'(' + new Date(bid.timestamp).toLocaleTimeString() + ')'"></span>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </template>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </template>
+            <!-- Student Interface -->
+            <template x-if="currentStudent && !isBrief">
+                <div>
+                    <h1>Trade Simulation</h1>
+                    <div class="phase-indicator" x-text="getPhaseText()"></div>
+                    <!-- Student Status -->
+                    <div class="student-status">
+                        <div>
+                            <label>Your Name</label>
+                            <strong x-text="currentStudent?.name"></strong>
+                        </div>
+                        <div>
+                            <label>Bank Account</label>
+                            <strong x-text="'€' + (currentStudent?.budget || 100)"></strong>
+                        </div>
+                        <div>
+                            <label>Total Assets</label>
+                            <strong x-text="'€' + getTotalAssets()"></strong>
+                        </div>
+                        <div x-show="currentStudent?.items">
+                            <label>Your Items</label>
+                            <strong x-text="currentStudent?.items?.length || 0"></strong>
+                        </div>
+                    </div>
+                    <!-- My Items -->
+                    <div class="my-items" x-show="currentStudent?.items && currentStudent.items.length > 0">
+                        <h2>My Items</h2>
+                        <template x-for="itemId in currentStudent.items" :key="itemId">
+                            <div class="item">
+                                <span>
+                                    <strong x-text="items[itemId]?.name"></strong>
+                                </span>
+                                <div x-show="phase === 'pricing' && !items[itemId]?.price">
+                                    <input type="number" x-model="items[itemId].priceInput" placeholder="Price (€)" min="0.01" step="0.01" style="width: 120px;">
+                                    <button @click="submitPrice(itemId, items[itemId].priceInput)">Submit Price</button>
+                                </div>
+                                <div x-show="items[itemId]?.value">
+                                    <span style="color: var(--text-secondary);">
+                                        Value: €<span x-text="items[itemId].value"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                    <!-- Market Table -->
+                    <div x-show="phase === 'bidding' || phase === 'bids_published' || phase === 'complete'">
+                        <h2>Market</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <!-- <th>Owner</th> -->
+                                    <th>Price</th>
+                                    <th x-show="phase === 'bidding'">Your Bid</th>
+                                    <th x-show="phase === 'bids_published' || phase === 'complete'">Winning Bid</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template x-for="(item, id) in items" :key="id">
+                                    <!-- <tr x-show="item.owner !== currentStudentId"> -->
+                                    <tr>
+                                        <td x-text="item.name"></td>
+                                        <!-- <td x-text="students[item.owner]?.name"></td> -->
+                                        <td x-text="'€' + item.price"></td>
+                                        <td x-show="phase === 'bidding'">
+                                            <template x-if="!myBids[id]">
+                                                <div>
+                                                    <input type="number" x-model="item.bidInput" placeholder="Bid amount" min="0" step="0.01" style="width: 120px;">
+                                                    <button @click="submitBid(id, item.bidInput)" :disabled="getBidCount() >= 2">Bid</button>
+                                                </div>
+                                            </template>
+                                            <template x-if="myBids[id]">
+                                                <span>
+                                                    €<span x-text="myBids[id].amount"></span>
+                                                    ✓
+                                                
+                                                
+                                                </span>
+                                            </template>
+                                        </td>
+                                        <td x-show="phase === 'bids_published' || phase === 'complete'">
+                                            <template x-if="bids[id] && Object.keys(bids[id]).length > 0">
+                                                <span x-text="'€' + getWinningBid(id).amount + ' (' + students[getWinningBid(id).studentId]?.name + ')'"></span>
+                                            </template>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Waiting Messages -->
+                    <div x-show="phase === 'waiting'" class="waiting-message">
+                        <p>Waiting for professor to allocate items...</p>
+                    </div>
+                    <div x-show="phase === 'pricing' && currentStudent?.items && currentStudent.items.every(id => items[id]?.price)" class="waiting-message">
+                        <p>✓ Prices submitted. Waiting for other students...</p>
+                    </div>
+                    <div x-show="phase === 'bidding' && getBidCount() >= 2" class="waiting-message">
+                        <p>✓ Bids submitted. Waiting for professor to publish bids...</p>
+                    </div>
+                </div>
+            </template>
+            <!-- Debrief Interface -->
+            <template x-if="isDebrief">
+                <div>
+                    <h1>Session Debrief</h1>
+                    <div x-show="!debriefData" class="upload-area" @click="$refs.fileInput.click()">
+                        <input type="file" x-ref="fileInput" @change="loadDebriefData($event)" accept=".json">
+                        <p style="color: var(--text-secondary);">Click to upload session data JSON file</p>
+                    </div>
+                    <div x-show="debriefData">
+                        <button @click="debriefData = null; $refs.fileInput.value = ''" class="danger" style="margin-bottom: 20px;">Clear Data</button>
+                        <div class="debrief-section">
+                            <h3>Session Overview</h3>
+                            <div class="progress-item">
+                                <span>Exported At:</span>
+                                <span x-text="debriefData?.exportedAt"></span>
+                            </div>
+                            <div class="progress-item">
+                                <span>Total Students:</span>
+                                <span x-text="debriefData?.summary?.totalStudents"></span>
+                            </div>
+                            <div class="progress-item">
+                                <span>Total Items:</span>
+                                <span x-text="debriefData?.summary?.totalItems"></span>
+                            </div>
+                            <div class="progress-item">
+                                <span>Total Bids:</span>
+                                <span x-text="debriefData?.summary?.totalBids"></span>
+                            </div>
+                            <div class="progress-item">
+                                <span>Total Trades:</span>
+                                <span x-text="debriefData?.summary?.trades?.length || 0"></span>
+                            </div>
+                        </div>
+                        <div class="debrief-section">
+                            <h3>Initial Allocations & Final Outcomes</h3>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Student</th>
+                                        <th>Initial Items</th>
+                                        <th>Final Items</th>
+                                        <th>Initial Budget</th>
+                                        <th>Final Budget</th>
+                                        <th>Budget Change</th>
+                                        <th>Final Assets</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template x-for="perf in debriefData?.summary?.studentPerformance" :key="perf.id">
+                                        <tr>
+                                            <td x-text="perf.name"></td>
+                                            <td x-text="getInitialItems(perf.id)"></td>
+                                            <td x-text="perf.itemCount"></td>
+                                            <td>€100</td>
+                                            <td x-text="'€' + perf.finalBudget"></td>
+                                            <td :style="perf.budgetChange >= 0 ? 'color: var(--accent-light)' : 'color: #bf616a'" x-text="(perf.budgetChange >= 0 ? '+' : '') + '€' + perf.budgetChange"></td>
+                                            <td x-text="'€' + getFinalAssets(perf.id)"></td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="debrief-section">
+                            <h3>All Items - Pricing & Trading</h3>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Initial Owner</th>
+                                        <th>Price Set</th>
+                                        <th>Bids Received</th>
+                                        <th>Highest Bid</th>
+                                        <th>Final Owner</th>
+                                        <th>Traded?</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template x-for="(item, itemId) in debriefData?.items" :key="itemId">
+                                        <tr x-data="{trade: item.traded}">
+                                            <td x-text="item.name"></td>
+                                            <td x-text="debriefData.items[itemId].initialOwner ? debriefData.students[debriefData.items[itemId].initialOwner]?.name : 'Unknown'"></td>
+                                            <td x-text="item.price ? '€' + item.price : '-'"></td>
+                                            <td x-text="getBidCountDebrief(itemId)"></td>
+                                            <!--<td x-text="getWinningBidDisplay(itemId)"></td>-->
+                                            <td x-text="`${item.highestBid || 'none'} ( ${debriefData.students[item.highestBidder]?.name || ' '} )`"></td>
+                                            <td x-text="debriefData.items[itemId].finalOwner ? debriefData.students[debriefData.items[itemId].finalOwner]?.name : debriefData.students[debriefData.items[itemId].initialOwner]?.name"></td>
+                                            <td x-text="trade ? 'Yes' : 'No'"></td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="debrief-section">
+                            <h3>Executed Trades</h3>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Seller</th>
+                                        <th>Buyer</th>
+                                        <th>Price</th>
+                                        <th>Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template x-for="trade in debriefData?.summary?.trades" :key="trade.item + trade.buyerId">
+                                        <tr>
+                                            <td x-text="trade.item"></td>
+                                            <td x-text="trade.seller"></td>
+                                            <td x-text="trade.buyer"></td>
+                                            <td x-text="'€' + trade.price"></td>
+                                            <td x-text="new Date(trade.timestamp).toLocaleTimeString()"></td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </template>
+            <!-- Item Modal -->
+            <template x-if="showItemModal">
+                <div class="modal-overlay" @click.self="showItemModal = false">
+                    <div class="modal">
+                        <h2>Edit Item List</h2>
+                        <p style="color: var(--text-secondary); margin-bottom: 20px;">Enter up to 30 item names for the simulation.</p>
+                        <div class="items-grid">
+                            <template x-for="i in 30" :key="i">
+                                <input type="text" x-model="itemInputs[i-1]" :placeholder="'Item ' + i">
+                            </template>
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <button @click="saveItemList()">Save Item List</button>
+                            <button @click="showItemModal = false">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+        <footer>
+            <p>© 2026 Sach Wry</p>
+        </footer>
+        <script src="trade.js"></script>
+    </body>
+</html>
