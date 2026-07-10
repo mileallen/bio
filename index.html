@@ -1,379 +1,866 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sach Wry :: Bio and portfolio</title>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sach Wry :: Bio and Work</title>
+        <link rel="icon" type="image/png" href="./img/feather.png">
+        <style>
+            :root {
+                --greyLeft: #5f6d7e;
+                --greyLeftDark: #425164;
+                --greyRight: #7a7a7a;
+                --grey10: #e7e7e7;
+                --grey20: #adadad;
+                --grey30: #7a7a7a;
+                --grey40: #5a5a5a;
+                --grey50: #252525;
+                --darkMask: #3131317e;
+                --liteMask: #a7a6a680;
+                --highlight: #87ceeb;
+            }
 
-    <link rel="icon" type="image/png" href="./img/feather.png">
+            html, body {
+                width: 100%;
+                height: 100%;
+                background-color: var(--grey40);
+                color: var(--grey10);
+                padding: 0;
+                margin: 0;
+                font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Avenir, "Avenir Next", "Roboto", sans-serif;
+                overflow: hidden;
+                /* Prevent body scroll, layout handles internal scrolling */
+                line-height: 1.6;
+            }
 
-    <link rel="stylesheet" href="./look.css">
+            * {
+                box-sizing: border-box;
+            }
 
-</head>
+            p {
+                margin: 0 0 1rem 0;
+                font-weight: 300;
+            }
 
-<body>
-  
-    
-<div class="main" id="page" data-tab="" data-slid="0">
+            a {
+                color: var(--highlight);
+                text-decoration: none;
+                transition: color 0.2s ease;
+            }
 
-    <div class="person">
+            a:hover {
+                color: var(--grey10);
+            }
 
-        <div class="persTop"> 
-        <div class="profilePic">
-            <img src="./img/profile.jpg" width="100%" alt="Sach Wry">
-        </div>
-            <div class="profile">
-                <p class="name">Sach <span style="color:#000000">Wry</span></p>
-                <p>Bio and Works</p>
-            </div>
-        </div>
+            /* --- Layout --- */
+            .main {
+                display: flex;
+                flex-direction: column;
+                height: 100vh;
+            }
 
+            /* --- Sidebar (.person) --- */
+            .person {
+                background-color: var(--greyLeft);
+                /* padding: 2rem 1rem; */
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                z-index: 10;
+                flex-shrink: 0;
+            }
 
-        <div class="persBottom">
+            .profilePic {
+                width: 8rem;
+                height: 8rem;
+                border: 3px solid rgba(255,255,255,0.1);
+                border-radius: 50%;
+                overflow: hidden;
+                margin-bottom: 1.5rem;
+                box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            }
 
-            <div class="menuTop" onclick="menuTog()"> &#x1D306; </div>
+            .profilePic img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
 
-            <div class="menu" id="menubox" arti="what">
-                    <div  class="nav" id="nav0" onclick="location.href='#top'">Welcome</div>
-                    <div  class="nav" id="nav1" onclick="location.href='#writ'">Writing</div>
-                    <div  class="nav" id="nav2" onclick="location.href='#course'">Courses</div>
-             <!--   <div  class="nav" id="nav3" onclick="location.href='#book'">Book site</div> -->
-                    <div  class="nav" id="nav3" onclick="location.href='#apps'">Web Apps</div>
-            </div>
+            .profile {
+                text-align: center;
+                margin-bottom: 2rem;
+            }
 
-        </div>
-    
-    </div>
+            .name {
+                font-size: 1.8rem;
+                font-weight: 300;
+                margin-bottom: 0.2rem;
+                letter-spacing: 0.5px;
+            }
 
-    <div class="works">
+            .name span {
+                color: #000000;
+                font-weight: 400;
+            }
 
+            /* Mobile Menu Toggle - Restored Original Styles */
+            .menuTop {
+                color: var(--darkMask);
+                font-size: 2em;
+                width: 30%;
+                background-color: #87ceeb;
+                text-align: center;
+                border-radius: 0.5rem;
+                cursor: pointer;
+                user-select: none;
+                margin-bottom: 1rem;
+            }
 
+            .menu {
+                width: 100%;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.4s ease;
+                display: flex;
+                flex-direction: column;
+            }
 
-        <div class="sect" id="top" indx="0">
+            .menu.is-open {
+                max-height: 300px;
+            }
 
-			<div>
+            /* Navigation - Restored Original Colors */
+            .nav {
+                display: block;
+                font-size: 1.5rem;
+                color: var(--greyLeftDark);
+                width: 100%;
+                padding: 0.5rem;
+                text-align: center;
+                cursor: pointer;
+                transition: background 0.3s, color 0.3s;
+            }
 
-                <h2> Educator  |  Writer  |  Coder</h2>
-                
-				<div class="maintext">
+            .nav:hover {
+                background: #5b6878;
+            }
 
-					<p> Phd in Economics and Policy; studied engineering and business management; worked in federal Policy Analysis and academic research; taught undergrad and graduate courses to diverse classes of students from over 70 countries.<br><br> 
-	                
-	                Working on a book that bridges economic history and natural history, connecting the state of knowledge across news beats, science disciplines and historical periods - a primer of sorts for generalists who would not be replaced by machines in the next decade.
-					<br><br> 
-					
-					</p>
+            .nav.active-nav {
+                color: var(--greyLeft);
+                background-color: var(--greyLeftDark);
+                pointer-events: none;
+            }
 
-					<div class="yt">
-					<p> Abridged excerpts from the book research feed a youtube channel. </p>
-	
-					<a href="https://www.youtube.com/@ecohisci/videos" target="blank"><img id="" class=""  src=""  data-lateimg="./img/yt-thumb.png"></a>
-					</div>
-						
-					
-				</div>
-				
-				
+            /* --- Main Content (.works) with Horizontal Sliding --- */
+            .works {
+                background-color: var(--greyRight);
+                flex-grow: 1;
+                position: relative;
+                overflow: hidden;
+                /* Hides horizontal slider overflow */
+            }
 
+            /* The 400% wide container holding all sections */
+            .works-slider {
+                display: flex;
+                width: 500%;
+                /* 5 sections */
+                height: 100%;
+                transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            }
 
-			</div>
+            .sect {
+                width: 20%;
+                /* 100% divided by 5 sections */
+                height: 100%;
+                overflow-y: hidden;
+                /* Independent vertical scroll per section */
+                padding: clamp(2rem, 5vw, 4rem) clamp(2rem, 8vw, 6rem);
+                display: flex;
+                flex-direction: column;
+            }
 
-			
-            <div class="coords">
+            .sect.scrollOn {
+                overflow-y: auto;
+            }
 
-					<a title="Personal email" href="mailto: research • mentor ⓐ outlook • com"><svg class="svg-icon"><use xlink:href="#email"></use></svg></a>
-				    
-					<a title="Mastodon" rel="me" href="https://econtwitter.net/@wry"><svg class="svg-icon"><use xlink:href="#masto"></use></svg></a>
-                    <a title="Professional recommendations" href="https://nl.linkedin.com/in/sachwry/"><svg class="svg-icon"><use xlink:href="#linked"></use></svg></a>
-                    <a title="Work profile" href="http://www.merit.unu.edu/about-us/profile/?staff_id=1345"><svg class="svg-icon"><use xlink:href="#vcard"></use></svg></a>
-             <!--   <a title="Academia.edu, old profile" href="http://unu.academia.edu/SachWry"><svg class="svg-icon"><use xlink:href="#papers"></use></svg></a> -->
-                    
-                    <a title="Github" href="https://github.com/mileallen"><svg class="svg-icon"><use xlink:href="#git"></use></svg></a>
-            </div>
+            .sect h2 {
+                font-weight: 300;
+                line-height: 1.2;
+                font-size: clamp(1.8rem, 4vw, 2.5rem);
+                margin-top: 0;
+                margin-bottom: 2rem;
+                color: white;
+            }
 
+            .sect .title {
+                font-weight: 400;
+                font-size: 1.8rem;
+                margin-bottom: 1.5rem;
+                color: white;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+                padding-bottom: 0.5rem;
+            }
 
+            /* Intro Layout */
+            .intro-grid {
+                display: grid;
+                gap: 2rem;
+                grid-template-columns: 1fr;
+            }
 
-        </div>
+            .yt-box {
+                background: rgba(0,0,0,0.1);
+                padding: 1.5rem;
+                border-radius: 1rem;
+                margin-top: 1rem;
+            }
 
+            .yt-box img {
+                width: 100%;
+                border-radius: 0.5rem;
+                filter: grayscale(100%);
+                transition: filter 0.3s;
+                margin-top: 1rem;
+            }
 
-        <div class="sect" id="writ" indx="1">
+            .yt-box img:hover {
+                filter: grayscale(0%);
+            }
+
+            /* Social Icons */
+            .coords {
+                display: flex;
+                gap: 1rem;
+                margin-top: 3rem;
+                flex-wrap: wrap;
+            }
+
+            .svg-icon {
+                width: 24px;
+                height: 24px;
+                stroke: var(--grey10);
+                transition: all 0.2s ease;
+            }
+
+            .coords a:hover .svg-icon {
+                stroke: var(--highlight);
+                transform: translateY(-3px);
+            }
+
+            /* --- Tiles Grid (Writing & Apps) --- */
+            .pieces {
+                display: grid;
+                gap: 2rem;
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                margin-top: 2rem;
+            }
+
+            .tile {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .tile a {
+                display: block;
+                border-radius: 0.75rem;
+                overflow: hidden;
+            }
+
+            .tile img {
+                width: 100%;
+                height: auto;
+                display: block;
+                aspect-ratio: 16 / 9;
+                object-fit: fill;
+                border-radius: 0.75rem;
+                filter: grayscale(100%);
+                transition: transform 0.4s ease, filter 0.4s ease;
+            }
+
+            .tile a:hover img {
+                filter: grayscale(0%);
+                transform: scale(1.03);
+            }
+
+            .tile a:hover div {
+                color: var(--highlight);
+            }
+
+            .tile-title {
+                margin-top: 0.7rem;
+                font-size: 1.1rem;
+                font-weight: 400;
+                color: white;
+            }
+
+            /* --- Courses Layout --- */
+            .courses-layout {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                margin-top: 2rem;
+                align-items: start;
+            }
+
+            .courselist {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .course-item {
+                cursor: pointer;
+                padding: 0.8rem 1rem;
+                margin: 0;
+                border-radius: 0.5rem;
+                border-left: 3px solid transparent;
+                /* background: rgba(0,0,0,0.05); */
+                transition: all 0.3s ease;
+                font-size: 1rem;
+                line-height: 1.3;
+            }
+
+            .course-item:hover {
+                background: rgba(255,255,255,0.05);
+            }
+
+            .course-item.is-active {
+                /* border-left-color: var(--highlight);
+            background: rgba(255,255,255,0.1); */
+                color: #303030;
+                font-weight: 400;
+            }
+
+            .boxbox {
+                display: flex;
+                flex-direction: column;
+            }
             
+            .slidebox {
+                background-color: rgba(0,0,0,0.2);
+                padding: 0.5rem;
+                border-radius: 1rem;
+                position: relative;
+                aspect-ratio: 16/9;
+                width: 100%;
+            }
 
-                <p class="title">Newsletter and more</p>
-                <p>I write a <a href="https://scotoma.substack.com/"> free newsletter </a>, a critique of elite journalism with a wonkish perspective from the Global South. 
-					Here's a mixed-bag of that and older pieces.</p>
+            .slide-img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                border-radius: 0.5rem;
+                opacity: 0;
+                position: absolute;
+                top: 0;
+                left: 0;
+                padding: 0.5rem;
+                transition: opacity 0.5s ease;
+                pointer-events: none;
+            }
 
-                <div class="pieces">
-					
+            .slide-img.is-active {
+                opacity: 1;
+                pointer-events: auto;
+            }
 
-						<div class="tile">
-                          <a href="https://scotoma.substack.com/p/liberal-values-and-trade">
-                          <img src="" data-lateimg="./img/trade-cloud.webp" alt="Graphic with trade as word cloud">
-                            <span class="tileShell">
-                                <span class="tileCore">
-                                    <span>The pull of Liberalism</span>
-                                    <p>Amid chatter of deglobalization and allied blocs, a more honest ‘accounting’ of the interests of nations might give us a more stable world.</p>
-                                </span></span></a>
-                        </div>
+            /* Footer */
+            .foot {
+                padding: 2rem 2rem 0 2rem;
+                text-align: center;
+                font-size: 0.8rem;
+                color: var(--grey20);
+                border-top: 1px solid rgba(255,255,255,0.05);
+                margin-top: 4rem;
+            }
 
-                  
-                        <div class="tile">
-                          <a href="https://forum.effectivealtruism.org/posts/FA4tC72qAB5k37uFC/forms-and-sources-of-north-atlantic-bias">
-                          <img src="" data-lateimg="./img/embodied-labor.webp" alt="Graphic for embodied labor">
-                            <span class="tileShell">
-                                <span class="tileCore">
-                                    <span>The Wages of North-Atlantic Bias</span>
-                                    <p>A community of talented and connected people intend to do good better. What might they learn if they lived where they want to have an impact?</p>
-                                </span></span></a>
-                        </div>
-					
-                    
-                        <div class="tile">
-                          <a href="https://medium.com/digital-diplomacy/news-media-schema-2020-cb4bcb589f52">
-                          <img src="" data-lateimg="./img/tab.jpg" alt="Cuneiform tablet">
-                            <span class="tileShell">
-                                <span class="tileCore">
-                                    <span>Revaluing journalism</span>
-                                    <p>How news media will take back control and shape the internet.</p>
-                                </span></span></a>
-                            
-                        </div>
+            .foot p {
+                margin-bottom: 0.3rem;
+            }
 
-					
+            .citation-list {
+                /* font-family: Arial, sans-serif; */
+                line-height: 1.6;
+                max-width: 800px;
+                margin: 20px;
+                padding: 0 15px;
+            }
 
-                        <div class="tile">
-                          <a href="https://scotoma.substack.com/p/tv-chandrayaan-thucydides">
-                          <img src="" data-lateimg="./img/chandrayaan.png" alt="Cuneiform tablet">
-                            <span class="tileShell">
-                                <span class="tileCore">
-                                    <span>What TV writers say to the Thucydides’ trap</span>
-                                    <p>A TV show proposes a diplomatic device to prevent the imminent USA versus China showdown of the century.</p>
-                                </span></span></a>
-                            
-                        </div>
-					
+            .citation-item {
+                font-size: 0.9rem;
+                font-weight: 300;
+                padding-left: 36px;
+                /* Adjusts the depth of the hanging indent */
+                text-indent: -36px;
+                /* Pulls the first line back to the left margin */
+                margin-bottom: 20px;
+                /* Spacing between citations */
+                word-wrap: break-word;
+                /* Ensures long DOIs/URLs don't break layout */
+            }
 
-                        <div class="tile">
-                          <a href="https://scotoma.substack.com/p/llms-and-blue-collar-jobs">
-                          <img src="" data-lateimg="./img/bluecollar.png" alt="">
-                            <span class="tileShell">
-                                <span class="tileCore">
-                                    <span>Could GPT actually help blue-collar fortunes?</span>
-                                    <p>Global labor markets will be just as directly affected by what GPT-4 and other LLMs cannot do.</p>
-                                </span></span></a>
-                            
-                        </div>
+            .citation-item i {
+                font-style: italic;
+            }
 
+            .citation-item a {
+                /* color: #0066cc; */
+                text-decoration: none;
+            }
 
-                        <div class="tile">
-                          <a href="http://www.merit.unu.edu/policy-games/">
-                          <img src="" data-lateimg="./img/obama.jpg" alt="Obama with EU leaders">
-                            <span class="tileShell">
-                                <span class="tileCore">
-                                    <span>Games in Policy</span>
-                                    <p>Obama's Executive Order strategy looks much like Public Procumrent in Europe, with a twist.</p>
-                                </span></span></a>
-                            
-                        </div>					
+            .citation-item a:hover {
+                text-decoration: underline;
+            }
 
+            /* --- Desktop Specifics --- */
+            @media (min-width: 60em) {
+                .main {
+                    flex-direction: row;
+                }
 
-					
+                .person {
+                    width: 18%;
+                    min-width: 250px;
+                    height: 100vh;
+                    justify-content: center;
+                }
 
-                </div> 
+                .works {
+                    width: 82%;
+                }
 
+                .menuTop {
+                    display: none;
+                }
 
-        </div>
+                .menu {
+                    max-height: none !important;
+                }
 
+                #welcome {
+                    justify-content: center;
+                }                
 
-        <div class="sect" id="course" indx="2">
+                .intro-grid {
+                    grid-template-columns: 2fr 1fr;
+                }
 
-            <p class="title">Courses</p>
+                .courses-layout {
+                    grid-template-columns: 1fr 2.5fr;
+                    /* 2 columns: List left, Slides right */
+                    gap: 3rem;
+                }
+            }
 
-            <p>Distinctive expertise in designing and delivering courses at the intersection of economics, policy and business, with a dash of science. Below is a selection of slides from some of them. [Click a title to see the corresponding slide below.]</p><br>
-              
-              <div class="courselist" id="courses">
-
-                <p><span id="c0" onclick="pageState.slid=0;">Writing Policy Memos</span></p>
-                <p><span id="c1" onclick="pageState.slid=1;">Multinational Companies in International Relations</span></p>
-                <p><span id="c2" onclick="pageState.slid=2;">Strategy, Technology and the Environment</span></p>
-                <p><span id="c3" onclick="pageState.slid=3;">Lessons from Economic History</span></p>
-                <p><span id="c4" onclick="pageState.slid=4;">New Insights from Evolution</span></p>
-				  
-              </div>
-
-              <div class="slidebox" id="slide">
-			  
-                  <img id="sld0" class="slidesrc" style="opacity:1" src="" data-lateimg="./img/slide-0.png"> 
-
-                  <img id="sld1" class="slidesrc" style="opacity:0" src="" data-lateimg="./img/slide-1.png"> 
-                  <img id="sld2" class="slidesrc" style="opacity:0" src="" data-lateimg="./img/slide-2.png"> 
-                  <img id="sld3" class="slidesrc" style="opacity:0" src="" data-lateimg="./img/slide-3.png"> 
-                  <img id="sld4" class="slidesrc" style="opacity:0" src="" data-lateimg="./img/slide-4.png"> 
-
-				  
-              </div>
-
-
-        </div>
-
-
-  <!--      <div class="sect" id="book" indx="3">
+            /* Style for your existing small thumbnails */
+            .slide-thumb {
+              cursor: pointer;
+              transition: transform 0.2s ease;
+            }
+            .slide-thumb:hover {
+              transform: scale(1.03);
+            }
+            /* Reset default dialog styles to make it a flexible container */
+            #image-modal {
+              border: none;
+              background: transparent;
+              padding: 0;
+              overflow: visible; /* Allows the X button to slightly hang out if needed */
+              max-width: 85vw;  /* Leaves a 7.5vw margin on left/right */
+              max-height: 85vh; /* Leaves a 7.5vh margin on top/bottom */
+            }
             
-
-            <p>A companion website for the book is taking shape <a href="./book">here</a>. 
-            </p><br>
-
-            <p>
-            The site offers teasers for some insights from the book and soon an excerpt from its opening pages. The book is aimed at a wide audience, including students, journalists, researchers and writers - anyone who needs to come up with new ideas - but also anyone who is curious, wants to understand the world better, and can use ideas, from precocious kids to CEOs, VC bosses, bureaucrats and others with influence.
-              
-            </p>
-
-
-        </div> -->
-
-
-        <div class="sect" id="apps" indx="3">
-
-            <p class="title">Software</p>
-
-            <p>Ongoing leisure pursuits to be something more than an amateur web developer. Below are examples of some edutainment game apps. Neither this website nor the games below use any frameworks, libraries or plugins. All code is home-baked, while attempting to be screen-responsive to the last detail, and aiming for a perfect 100 <a href="https://developers.google.com/speed/pagespeed/insights/">Lighthouse</a> score. The games are even written 'declaratively' in the markup, with Pod JS, a single thrifty Class. All source code at <a href="https://github.com/mileallen">Github</a>.              
-            </p>
-
-            <div class="pieces">
-
-                <div class="tile">
-                  <a href="https://pod.js.org/hanzi">
-                  <img src="" data-lateimg="./img/hanzi.png" alt="Hanzi app">
-                    <span class="tileShell">
-                        <span class="tileCore">
-                            <span>Hanzi game | 汉字游戏</span>
-                            <p>Pelmanist memory game. Memorise Mandarin characters or whatever else you might use flash cards for!</p>
-                        </span></span></a>
-                    
+            /* Ensure the image scales proportionally without distortion */
+            #modal-img {
+              display: block;
+              width: 100%;
+              height: 100%;
+              max-width: 85vw;
+              max-height: 85vh;
+              object-fit: contain; 
+              box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+              border-radius: 4px;
+            }
+            
+            /* Translucent grey overlay background */
+            #image-modal::backdrop {
+              background-color: rgba(0, 0, 0, 0.35);
+              backdrop-filter: blur(3px); /* Optional: adds a modern subtle blur to the background */
+            }
+            
+            /* The distinct translucent X button in the top right */
+            #close-modal {
+              position: absolute;
+              top: -15px;
+              right: -15px;
+              width: 36px;
+              height: 36px;
+              border: none;
+              border-radius: 50%;
+              background: rgba(255, 255, 255, 0.25);
+              color: #fff;
+              font-size: 24px;
+              line-height: 1;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              transition: background 0.2s ease;
+              z-index: 10;
+            }
+            
+            #close-modal:hover {
+              background: rgba(255, 255, 255, 0.4);
+            }
+            
+        </style>
+    </head>
+    <body>
+        <div class="main">
+            <!-- Sidebar -->
+            <div class="person">
+                <div class="profile">
+                    <!-- <div class="profilePic">
+                    <img src="./img/profile.jpg" alt="Sach Wry" data-lateimg="./img/profile.jpg" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzU1NSIvPjwvc3ZnPg=='">
+                </div> -->
+                    <p class="name">
+                        Sach <span>Wry</span>
+                    </p>
+                    <p style="font-size: 0.9rem; color: var(--grey20);">/ sʌtʃ  raɪ /</p>
                 </div>
-
-                <div class="tile">
-                  <a href="https://pod.js.org/verba">
-                  <img src="" data-lateimg="./img/verba.png" alt="word links app">
-                    <span class="tileShell">
-                        <span class="tileCore">
-                            <span>Verba</span>
-                            <p>A word-linking game with 2 vocabulary levels. No JS framework! All own code.</p>
-                        </span></span></a>
-                    
+                <!-- Mobile toggle binds to the state menuOpen -->
+                <div class="menuTop" onclick="state.menuOpen = !state.menuOpen">&#x2630;</div>
+                <!-- Navigation automatically updates class based on activeTab state -->
+                <div class="menu" data-classval="is-open : menuOpen">
+                    <div class="nav" data-classval="active-nav : activeTab : 0" onclick="state.activeTab = 0; state.menuOpen = false">TL;DR</div>
+                    <div class="nav" data-classval="active-nav : activeTab : 1" onclick="state.activeTab = 1; state.menuOpen = false">Research</div>
+                    <div class="nav" data-classval="active-nav : activeTab : 2" onclick="state.activeTab = 2; state.menuOpen = false">Writing</div>
+                    <div class="nav" data-classval="active-nav : activeTab : 3" onclick="state.activeTab = 3; state.menuOpen = false">Classroom</div>
+                    <div class="nav" data-classval="active-nav : activeTab : 4" onclick="state.activeTab = 4; state.menuOpen = false">Code</div>
                 </div>
+            </div>
+            <!-- Main Content -->
+            <div class="works">
+                <!-- Horizontal Slider Wrapper -->
+                <div class="works-slider" id="slider">
+                    <!-- SECTION: WELCOME (Tab 0) -->
+                    <div class="sect" id="welcome" data-classval="scrollOn : activeTab : 0">
+                        <h2>Educator | Writer | Coder</h2>
 
+                            <div class="maintext">
+                                <p>PhD in Economics and Policy; studied engineering and business management; worked in federal Policy Analysis and academic research; taught undergrad and graduate courses to diverse classes of students from over 70 countries.</p>
+                                <p>Working on a book that bridges economic history and natural history, connecting the state of knowledge across news beats, science disciplines and historical periods - a primer of sorts for generalists who would not be replaced by machines in the next decade.</p>
+                                <div class="coords">
+                                    <!-- Modern Geometric SVGs -->
+                                    <a title="Personal email" href="mailto:research.mentor@outlook.com">
+                                        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="3" y="5" width="18" height="14" rx="2" ry="2"></rect>
+                                            <polyline points="3 7 12 13 21 7"></polyline>
+                                        </svg>
+                                    </a>
+                                    <a title="Mastodon" rel="me" href="https://econtwitter.net/@wry">
+                                        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M21 11.5c0-4-1.5-6.5-6.5-6.5S4 7.5 4 11.5v3c0 4 1.5 6.5 6.5 6.5s6.5-2.5 6.5-6.5"></path>
+                                            <polyline points="8 15 8 11 12 14 16 11 16 15"></polyline>
+                                        </svg>
+                                    </a>
+                                    <a title="Professional recommendations" href="https://linkedin.com/in/sachwry/">
+                                        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="2" y="9" width="4" height="12"></rect>
+                                            <circle cx="4" cy="4" r="2"></circle>
+                                            <rect x="10" y="9" width="4" height="12"></rect>
+                                            <path d="M14 12c0-2.5 2-4 4-4s4 1.5 4 4v7"></path>
+                                        </svg>
+                                    </a>
+                                    <!-- <a title="Work profile" href="http://www.merit.unu.edu/about-us/profile/?staff_id=1345">
+                                        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="3" y="4" width="18" height="16" rx="2" ry="2"></rect>
+                                            <circle cx="9" cy="10" r="3"></circle>
+                                            <line x1="5" y1="16" x2="13" y2="16"></line>
+                                            <line x1="16" y1="10" x2="19" y2="10"></line>
+                                            <line x1="16" y1="14" x2="19" y2="14"></line>
+                                        </svg>
+                                    </a> -->
+                                    <a title="Github" href="https://github.com/mileallen">
+                                        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
 
-                <div class="tile">
-                  <a href="https://pod.js.org/wikihop">
-                  <img src="" data-lateimg="./img/wikip.png" alt="Wikipedia links app">
-                    <span class="tileShell">
-                        <span class="tileCore">
-                            <span>wiki🌍hop</span>
-                            <p>In how many links can you jump from one Wikipedia article to another?</p>
-                        </span></span>
-                 </a>
+                            <div class="foot">
                     
+                            <p>© 2018-2026 Sach Wry</p>
+                    		<p>Credits for thumbnail images in the Writing section are acknowledged at the links.</p>
+                            <p>Icon designs from Freepik, Those icons and Pixel Perfect.</p>
+                    
+                            </div>
+
+                    </div>
+                    <!-- SECTION: research (Tab 1) -->
+                    <div class="sect" data-classval="scrollOn : activeTab : 1">
+
+                        <p class="title">Recent Work</p>
+                        <p>
+                            Current research covers the intersection of geoeconomics and institutions. At the broadest level, 
+                            it relates the origins of institutions in US economic history to their function today. At the narrowest, it includes
+                            modelling the effects of market-facing policy like minimum wage. On the side, there are tools and ideas for pedagogy.
+                        </p>
+                        
+                        <div class="citation-list">
+                            <!-- Sample 1: Journal Article with multiple authors and a DOI -->
+                            <div class="citation-item">
+                                Wry, Sach. 2025. <i>Finding an essential element in growth</i>. Working paper. August 2025. <br/>
+                                DOI: <a href="https://doi.org/10.17605/OSF.IO/w5vx4" target="_blank" rel="noopener">10.17605/OSF.IO/w5vx4</a>. [<a href="https://osf.io/gj574?view_only=b229eb6d9a154c6e99a0b1d0cdd04065">PDF</a>]
+                            </div>
+                            <div class="citation-item">
+                                Wry, Sach. 2026. <i>The other wages of exorbitant privilege</i>. Working paper. June 2026. <br/>
+                                DOI: <a href="https://doi.org/10.17605/OSF.IO/6pzwt" target="_blank" rel="noopener">10.17605/OSF.IO/6pzwt</a>. [<a href="https://osf.io/x84ch?view_only=cb868900272b4faa8906c9b291512258">PDF</a>]
+                            </div>
+                            <div class="citation-item">
+                                Wry, Sach. 2026. <i>A web simulation to illuminate foundational concepts in economics through a participatory auction experience</i>. Working paper. February 2026.
+                                URL: <a href="https://github.com/mileallen/econ-sim" target="_blank" rel="noopener">Github</a>.
+                            </div>
+                            <div class="citation-item">
+                                Wry, Sach. 2025. <i>Institutions through North-Atlantic economic history and 21st century China</i>. Working paper. March 2025.
+                                (Draft available on request.)
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- SECTION: WRITING (Tab 2) -->
+                    <div class="sect" data-classval="scrollOn : activeTab : 2">
+                        <p class="title">Newsletter and more</p>
+                        <p>
+                            I write a <a href="https://scotoma.substack.com/">free newsletter</a>
+                            , a critique of elite journalism with a wonkish perspective from the Global South. Here's a mixed-bag from that and other pieces.
+                        </p>
+                        <div class="pieces">
+                            <div class="tile">
+                                <a href="https://scotoma.substack.com/p/liberal-values-and-trade">
+                                    <img src="" data-lateimg="./img/trade-cloud.jpg" alt="Graphic with trade as word cloud">
+                                    <div class="tile-title">The pull of Liberalism</div>
+                                </a>
+                            </div>
+                            <div class="tile">
+                                <a href="https://www.linkedin.com/pulse/china-shock-began-manufacturing-assembly-india-begins-sach-wry-xbvsc/">
+                                    <img src="" data-lateimg="./img/gemini-worker.jpg" alt="Blue collar">
+                                    <div class="tile-title">The 'India shock' may not be win-win</div>
+                                </a>
+                            </div>
+                            <div class="tile">
+                                <a href="https://www.linkedin.com/pulse/underappreciated-risks-us-market-accreting-compounding-sach-wry-lplcc/">
+                                    <img src="" data-lateimg="./img/ftc-building.jpg" alt="Obama with EU leaders">
+                                    <div class="tile-title">Institutional risk in the US market</div>
+                                </a>
+                            </div>
+                            <div class="tile">
+                                <a href="https://forum.effectivealtruism.org/posts/FA4tC72qAB5k37uFC/forms-and-sources-of-north-atlantic-bias">
+                                    <img src="" data-lateimg="./img/embodied-labor.jpg" alt="Graphic for embodied labor">
+                                    <div class="tile-title">The Wages of North-Atlantic Bias</div>
+                                </a>
+                            </div>
+                            <div class="tile">
+                                <a href="https://medium.com/digital-diplomacy/news-media-schema-2020-cb4bcb589f52">
+                                    <img src="" data-lateimg="./img/tab.jpg" alt="Cuneiform tablet">
+                                    <div class="tile-title">Revaluing journalism</div>
+                                </a>
+                            </div>
+                            <div class="tile">
+                                <a href="https://scotoma.substack.com/p/tv-chandrayaan-thucydides">
+                                    <img src="" data-lateimg="./img/chandrayaan.jpg" alt="Chandrayaan">
+                                    <div class="tile-title">TV's answer to the Thucydides’ trap</div>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- SECTION: COURSES (Tab 3) -->
+                    <div class="sect" data-classval="scrollOn : activeTab : 3">
+                        <p class="title">Courses</p>
+                        <p>Distinctive expertise in designing and delivering courses at the intersection of economics, policy and business, with some science where germane. 
+                            <br/>[Click a title to see the corresponding sample lecture slide. Click the slide to see a larger version.]</p>
+                        <div class="courses-layout">
+                            <!-- Left: Course List -->
+                            <div class="courselist">
+                                <p class="course-item" data-classval="is-active : activeSlide : 0" onclick="state.activeSlide = 0">Institutions and the Global Economy</p>
+                                <p class="course-item" data-classval="is-active : activeSlide : 1" onclick="state.activeSlide = 1">Writing Policy Memos</p>
+                                <p class="course-item" data-classval="is-active : activeSlide : 2" onclick="state.activeSlide = 2">Economics for Policy Analysts & Managers</p>
+                                <p class="course-item" data-classval="is-active : activeSlide : 3" onclick="state.activeSlide = 3">Strategy, Technology and the Environment</p>
+                                <!-- <p class="course-item" data-classval="is-active : activeSlide : 4" onclick="state.activeSlide = 4">New Insights from Evolution</p> -->
+                            </div>
+                            <!-- Right: Slide Box -->
+                            <div class="slidebox">
+                                <img class="slide-img slide-thumb" data-classval="is-active : activeSlide : 0" src="" data-lateimg="./img/slide-0.png" alt="Slide 0">
+                                <img class="slide-img slide-thumb" data-classval="is-active : activeSlide : 1" src="" data-lateimg="./img/slide-1.png" alt="Slide 1">
+                                <img class="slide-img slide-thumb" data-classval="is-active : activeSlide : 2" src="" data-lateimg="./img/slide-2.png" alt="Slide 2">
+                                <img class="slide-img slide-thumb" data-classval="is-active : activeSlide : 3" src="" data-lateimg="./img/slide-3.png" alt="Slide 3">
+                                <!-- <img class="slide-img" data-classval="is-active : activeSlide : 4" src="" data-lateimg="./img/slide-4.png" alt="Slide 4"> -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- SECTION: APPS (Tab 4) -->
+                    <div class="sect" data-classval="scrollOn : activeTab : 4">
+
+                        <p class="title">Tech Projects</p>
+                        <p>Leisure pursuit to be a better-than-amateur coder. Several current and future projects overlap with research and pedagogy, 
+                            increasingly in collaboration with LLMs, including local setups such as Gemma. But the edutainment game apps below are from the pre-2023 era.</p>
+                        <div class="courses-layout">
+                            <!-- Left: Course List -->
+                            <div class="courselist">
+                                <p class="course-item" data-classval="is-active : activeShot : 0" onclick="state.activeShot = 0; state.codeurl = 'https://github.com/mileallen/cento'">Cento (notes in markdown)</p>
+                                <p class="course-item" data-classval="is-active : activeShot : 1" onclick="state.activeShot = 1; state.codeurl = 'https://github.com/mileallen/econ-sim'">Simulation for economics class</p>
+                                <p class="course-item" data-classval="is-active : activeShot : 2" onclick="state.activeShot = 2; state.codeurl = 'https://github.com/mileallen/pod/tree/main/hanzi'">Games</p>
+
+                            </div>
+                            <!-- Right: Slide Box -->
+                            <div class="codebox"> <div><a href="https://github.com/mileallen/cento" data-attrval="href: codeurl" data-textval="codeurl">https://github.com/mileallen/cento</a></div>
+                            <div class="slidebox">
+                                <img class="slide-img slide-thumb" data-classval="is-active : activeShot : 0" src="" data-lateimg="./img/shot-0.png" alt="shot 0">
+                                <img class="slide-img slide-thumb" data-classval="is-active : activeShot : 1" src="" data-lateimg="./img/shot-1.png" alt="shot 1">
+                                <img class="slide-img slide-thumb" data-classval="is-active : activeShot : 2" src="" data-lateimg="./img/shot-2.png" alt="shot 2">
+                            </div>
+                            </div>
+                        </div>
+                        
+                    </div>
                 </div>
-
-
+                <!-- /works-slider -->
             </div>
         </div>
 
+        <dialog id="image-modal">
+          <button id="close-modal" aria-label="Close modal">×</button>
+          <img id="modal-img" src="" alt="Enlarged slide view">
+        </dialog>
 
-        <div class="foot">
+        <!-- Script: Wrapper and Logic Combined -->
+        <script>
+            function createStore(initialState={}, callback=null) {
+                const store = new Proxy(initialState,{
+                    set(target, key, value) {
+                        target[key] = value;
 
-        <p>Site content and design © 2018-2023 Sach Wry</p>
-		<p>Credits for thumbnail images in the Writing section are all acknowledged at the links.</p>
-        <p>Icon designs from Freepik, Those icons and Pixel Perfect.</p>
+                        document.querySelectorAll(`[data-textval="${key}"]`).forEach(el => {
+                            const prop = (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') ? 'value' : 'innerText';
+                            if (el[prop] !== value)
+                                el[prop] = value;
+                        }
+                        );
 
-        </div>
+                        document.querySelectorAll(`[data-classval]`).forEach(el => {
+                            const bindings = el.getAttribute('data-classval').split(';');
+                            bindings.forEach(binding => {
+                                const parts = binding.split(':').map(s => s.trim());
+                                if (parts.length >= 2) {
+                                    const [className,stateKey,targetVal] = parts;
+                                    if (stateKey === key) {
+                                        if (targetVal !== undefined) {
+                                            el.classList.toggle(className, String(value) === targetVal);
+                                        } else {
+                                            el.classList.toggle(className, !!value);
+                                        }
+                                    }
+                                }
+                            }
+                            );
+                        }
+                        );
 
-    
-    </div>
+                        document.querySelectorAll(`[data-attrval]`).forEach(el => {
+                            const bindings = el.getAttribute('data-attrval').split(';');
+                            bindings.forEach(binding => {
+                                const parts = binding.split(':').map(s => s.trim());
+                                if (parts.length >= 2) {
+                                    const [attrName,stateKey,targetVal] = parts;
+                                    if (stateKey === key) {
+                                        const condition = targetVal !== undefined ? (String(value) === targetVal) : !!value;
+                                        if (!condition) {
+                                            el.removeAttribute(attrName);
+                                        } else {
+                                            el.setAttribute(attrName, value === true ? '' : value);
+                                        }
+                                    }
+                                }
+                            }
+                            );
+                        }
+                        );
 
-</div>
+                        if (callback)
+                            callback(key, value);
+                        return true;
+                    }
+                });
 
+                // Initialize DOM by forcing setters
+                Object.keys(initialState).forEach(key => {
+                    store[key] = initialState[key];
+                }
+                );
 
-<svg class="sprite">
+                return store;
+            }
 
-  <symbol class="svg-sym" id="vcard" viewBox="0 0 512 512"><g>
-  
-    <path d="M37.294,204.929c-3.313-1.909-7.396-1.898-10.668,0.031l-5.5,3.192c-20.168,11.766-27.127,37.905-15.48,58.255
-				l17.085,29.883c1.917,3.38,5.5,5.372,9.251,5.372c0.917,0,1.833-0.115,2.75-0.355c4.667-1.252,7.917-5.486,7.917-10.326v-76.79
-				C42.649,210.374,40.607,206.838,37.294,204.929z"/>
-			<path d="M161.721,149.142h271.085c3.813,0,7.313-2.023,9.23-5.32c1.917-3.296,1.917-7.364,0.021-10.67l-51.921-90.808
-				c-11.23-19.651-38.295-27.015-57.922-15.625L156.346,129.23c-4.167,2.43-6.188,7.354-4.917,12.016
-				C152.679,145.908,156.908,149.142,161.721,149.142z"/>
-			<path d="M469.333,170.667H106.667C83.146,170.667,64,189.802,64,213.333V448c0,23.531,19.146,42.667,42.667,42.667h362.667
-				C492.854,490.667,512,471.531,512,448V213.333C512,189.802,492.854,170.667,469.333,170.667z M192.008,256.181
-				c23.522,0,42.668,19.15,42.668,42.7s-19.147,42.7-42.668,42.7c-23.522,0-42.668-19.15-42.668-42.7
-				S168.486,256.181,192.008,256.181z M277.345,406.296c0,11.405-9.563,20.683-21.334,20.683H128.005
-				c-11.771,0-21.334-9.278-21.334-20.683v-4.879c0-14.198,8.271-27.01,21.605-33.432c14.917-7.172,38.064-15.731,63.732-15.731
-				s48.815,8.559,63.732,15.731c13.334,6.422,21.605,19.234,21.605,33.432V406.296z M458.666,384H330.661
-				c-5.896,0-10.667-4.771-10.667-10.667c0-5.896,4.771-10.667,10.667-10.667h128.005c5.896,0,10.667,4.771,10.667,10.667
-				C469.333,379.229,464.562,384,458.666,384z M458.686,320H288.012c-5.896,0-10.667-4.771-10.667-10.667
-				c0-5.896,4.771-10.667,10.667-10.667h170.674c5.896,0,10.667,4.771,10.667,10.667C469.353,315.229,464.582,320,458.686,320z"/></g>
-  
-  </symbol>
+            // --- Instantiate State ---
+            const state = createStore({
+                activeTab: 0,
+                activeSlide: 0,
+                activeShot: 0,
+                menuOpen: false
+            }, (key, value) => {
+                // Apply horizontal sliding transform logic when tab changes
+                if (key === 'activeTab') {
+                    const slider = document.getElementById('slider');
+                    if (slider) {
+                        // Multiply the tab index by 25 since each section is 25% of the 400% container
+                        slider.style.transform = `translateX(-${value * 20}%)`;
+                    }
+                }
+            }
+            );
 
-  <symbol class="svg-sym" id="papers" viewBox="0 0 512 512">
-  
-    <g><path d="m15 1c-8.284 0-15 6.716-15 15v345h196c16.87 0 32.457 5.599 45 15.036v-305.036c0-38.66-31.34-70-70-70zm166 315h-121c-8.284 0-15-6.716-15-15s6.716-15 15-15h121c8.284 0 15 6.716 15 15s-6.716 15-15 15zm0-60h-121c-8.284 0-15-6.716-15-15s6.716-15 15-15h121c8.284 0 15 6.716 15 15s-6.716 15-15 15zm0-60h-121c-8.284 0-15-6.716-15-15s6.716-15 15-15h121c8.284 0 15 6.716 15 15s-6.716 15-15 15zm0-60h-121c-8.284 0-15-6.716-15-15s6.716-15 15-15h121c8.284 0 15 6.716 15 15s-6.716 15-15 15zm0-60h-121c-8.284 0-15-6.716-15-15s6.716-15 15-15h121c8.284 0 15 6.716 15 15s-6.716 15-15 15z"/>
-		<path d="m196 391h-196v45c0 8.284 6.716 15 15 15h226v-15c0-24.813-20.187-45-45-45z"/>
-			<g><path d="m271 334.694v41.342c9.472-7.126 20.682-12.06 32.867-14.051-12.463-7.169-23.575-16.429-32.867-27.291z"/>
-				<path d="m366 348.534c-52.383 0-95-42.617-95-95.001 0-52.383 42.617-94.999 95-94.999s95 42.617 95 95-42.617 95-95 95z"/>
-					<g><path d="m316 391c-24.813 0-45 20.187-45 45v15h103.015l-21.838-60z"/>
-						<path d="m512 436v-45h-32.123l21.592 59.323c6.102-1.903 10.531-7.595 10.531-14.323z"/>
-							<g><path d="m497 1h-156c-38.66 0-70 31.34-70 70v101.405c23.689-27.693 59.243-44.95 98.711-43.801 66.402 1.934 120.077 56.245 121.269 122.664.582 32.456-11.283 62.181-31.121 84.732l9.099 25h43.042v-345c0-8.284-6.716-15-15-15zm-45 75h-121c-8.284 0-15-6.716-15-15s6.716-15 15-15h121c8.284 0 15 6.716 15 15s-6.716 15-15 15z"/>
-							</g>
-					</g>
-							<g><path d="m379.312 377.825 41.284 113.428c5.667 15.569 22.882 23.597 38.451 17.93 15.569-5.667 23.597-22.882 17.93-38.451l-41.299-113.468c-16.446 11.083-35.659 18.358-56.366 20.561z"/>
-							</g>
-			</g>
-	</g>
-  
-  </symbol>
+            // Lazy load images
+            function fetchImgs() {
+                const lateImgs = document.querySelectorAll('img[data-lateimg]');
+                lateImgs.forEach(el => el.setAttribute('src', el.getAttribute('data-lateimg')));
+            }
 
+            window.addEventListener('load', fetchImgs, false);
 
-  <symbol class="svg-sym" id="linked" viewBox="0 0 24 24">
-  
-    <path d="m23.994 24v-.001h.006v-8.802c0-4.306-.927-7.623-5.961-7.623-2.42 0-4.044 1.328-4.707 2.587h-.07v-2.185h-4.773v16.023h4.97v-7.934c0-2.089.396-4.109 2.983-4.109 2.549 0 2.587 2.384 2.587 4.243v7.801z"/><path d="m.396 7.977h4.976v16.023h-4.976z"/><path d="m2.882 0c-1.591 0-2.882 1.291-2.882 2.882s1.291 2.909 2.882 2.909 2.882-1.318 2.882-2.909c-.001-1.591-1.292-2.882-2.882-2.882z"/>
-  
-  </symbol>
+            document.addEventListener('DOMContentLoaded', () => {
+              const modal = document.getElementById('image-modal');
+              const modalImg = document.getElementById('modal-img');
+              const closeBtn = document.getElementById('close-modal');
+              const thumbnails = document.querySelectorAll('.slide-thumb');
+            
+              // Open modal and swap image source on thumbnail click
+              thumbnails.forEach(thumb => {
+                thumb.addEventListener('click', () => {
+                  modalImg.src = thumb.src;
+                  modalImg.alt = thumb.alt;
+                  modal.showModal(); // Opens natively as a top-level modal
+                });
+              });
+            
+              // Close modal via the X button
+              closeBtn.addEventListener('click', () => {
+                modal.close();
+              });
+            
+              // Close modal when clicking outside the image (on the backdrop)
+              modal.addEventListener('click', (e) => {
+                // Since the dialog takes up the full dimensions of the image, 
+                // a click directly on the dialog element itself means the user clicked the backdrop.
+                if (e.target === modal) {
+                  modal.close();
+                }
+              });
+            });
 
-
-  <symbol class="svg-sym" id="email" viewBox="0 0 512 512">
-
-                <path d="M10.688,95.156C80.958,154.667,204.26,259.365,240.5,292.01c4.865,4.406,10.083,6.646,15.5,6.646
-                    c5.406,0,10.615-2.219,15.469-6.604c36.271-32.677,159.573-137.385,229.844-196.896c4.375-3.698,5.042-10.198,1.5-14.719
-                    C494.625,69.99,482.417,64,469.333,64H42.667c-13.083,0-25.292,5.99-33.479,16.438C5.646,84.958,6.313,91.458,10.688,95.156z"/>
-                <path d="M505.813,127.406c-3.781-1.76-8.229-1.146-11.375,1.542C416.51,195.01,317.052,279.688,285.76,307.885
-                    c-17.563,15.854-41.938,15.854-59.542-0.021c-33.354-30.052-145.042-125-208.656-178.917c-3.167-2.688-7.625-3.281-11.375-1.542
-                    C2.417,129.156,0,132.927,0,137.083v268.25C0,428.865,19.135,448,42.667,448h426.667C492.865,448,512,428.865,512,405.333
-                    v-268.25C512,132.927,509.583,129.146,505.813,127.406z"/>
-   
-  </symbol>
-
-
-  <symbol class="svg-sym" id="git" viewBox="0 0 24 24">
-
-    <path d="m12 .5c-6.63 0-12 5.28-12 11.792 0 5.211 3.438 9.63 8.205 11.188.6.111.82-.254.82-.567 0-.28-.01-1.022-.015-2.005-3.338.711-4.042-1.582-4.042-1.582-.546-1.361-1.335-1.725-1.335-1.725-1.087-.731.084-.716.084-.716 1.205.082 1.838 1.215 1.838 1.215 1.07 1.803 2.809 1.282 3.495.981.108-.763.417-1.282.76-1.577-2.665-.295-5.466-1.309-5.466-5.827 0-1.287.465-2.339 1.235-3.164-.135-.298-.54-1.497.105-3.121 0 0 1.005-.316 3.3 1.209.96-.262 1.98-.392 3-.398 1.02.006 2.04.136 3 .398 2.28-1.525 3.285-1.209 3.285-1.209.645 1.624.24 2.823.12 3.121.765.825 1.23 1.877 1.23 3.164 0 4.53-2.805 5.527-5.475 5.817.42.354.81 1.077.81 2.182 0 1.578-.015 2.846-.015 3.229 0 .309.21.678.825.56 4.801-1.548 8.236-5.97 8.236-11.173 0-6.512-5.373-11.792-12-11.792z"/>
-    
-  </symbol>
-
-
-  <symbol class="svg-sym" id="masto" viewBox="0 0 32 32" >
-	  
-	<path d="M 15.9375 4.03125 C 12.917 4.0435 9.9179219 4.4269844 8.3574219 5.1464844 C 8.3574219 5.1464844 5 6.6748594 5 11.880859 C 5 18.077859 4.9955 25.860234 10.5625 27.365234 C 12.6945 27.938234 14.527953 28.061562 16.001953 27.976562 C 18.676953 27.825562 20 27.005859 20 27.005859 L 19.910156 25.029297 C 19.910156 25.029297 18.176297 25.640313 16.029297 25.570312 C 13.902297 25.495313 11.6615 25.335688 11.3125 22.679688 C 11.2805 22.432688 11.264625 22.182594 11.265625 21.933594 C 15.772625 23.052594 19.615828 22.420969 20.673828 22.292969 C 23.627828 21.933969 26.199344 20.081672 26.527344 18.388672 C 27.041344 15.720672 26.998047 11.880859 26.998047 11.880859 C 26.998047 6.6748594 23.646484 5.1464844 23.646484 5.1464844 C 22.000984 4.3779844 18.958 4.019 15.9375 4.03125 z M 12.705078 8.0019531 C 13.739953 8.0297031 14.762578 8.4927031 15.392578 9.4707031 L 16.001953 10.505859 L 16.609375 9.4707031 C 17.874375 7.5037031 20.709594 7.6264375 22.058594 9.1484375 C 23.302594 10.596438 23.025391 11.531 23.025391 18 L 23.025391 18.001953 L 20.578125 18.001953 L 20.578125 12.373047 C 20.578125 9.7380469 17.21875 9.6362812 17.21875 12.738281 L 17.21875 16 L 14.787109 16 L 14.787109 12.738281 C 14.787109 9.6362812 11.429688 9.7360938 11.429688 12.371094 L 11.429688 18 L 8.9765625 18 C 8.9765625 11.526 8.7043594 10.585438 9.9433594 9.1484375 C 10.622859 8.3824375 11.670203 7.9742031 12.705078 8.0019531 z"/>
-	  
-  </symbol>
-
-
-</svg>
-
-
-<script src="./code.js">  </script>
-
-</body>
-</html>
+            
+        </script>
+    </body>
+</htm
