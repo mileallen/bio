@@ -285,7 +285,7 @@
     statusEl.innerText = "Settings updated.";
   };
 
-  // ROUTER: Access pad via example.com/my-pad#custom-name
+// ROUTER: Access pad via example.com/my-pad#custom-name
   async function initRouter() {
     const rawPadName = decodeURIComponent(window.location.hash.substring(1)).trim();
     if (!rawPadName) return; // Default Write Mode
@@ -303,37 +303,33 @@
       const padHash = await hashName(rawPadName);
       const searchFilename = `pad_${padHash}.encrypted`;
 
-      // Search GitHub for the public gist filename matching hash
-      const searchRes = await fetch(`https://api.github.com/search/code?q=filename:${searchFilename}`);
-      
-      let cipherText = null;
+      // 1. Try saved owner from localStorage first
+      let owner = localStorage.getItem('gh_owner');
 
-      if (searchRes.ok) {
-        const searchData = await searchRes.json();
-        if (searchData.items && searchData.items.length > 0) {
-          const rawUrl = searchData.items[0].html_url.replace('/blob/', '/raw/');
-          const contentRes = await fetch(rawUrl);
-          cipherText = await contentRes.text();
+      // 2. Fallback: Prompt once on new device (e.g. phone) if gh_owner isn't saved yet
+      if (!owner) {
+        owner = prompt("Enter your GitHub Username to load this pad:");
+        if (owner) {
+          localStorage.setItem('gh_owner', owner.trim());
+          owner = owner.trim();
+        } else {
+          throw new Error("GitHub Username is required to fetch the pad.");
         }
       }
 
-      // Fallback search directly across user Gists if code search delay applies
-      if (!cipherText) {
-        const c = getConfig();
-        const userGistsUrl = c.owner ? `https://api.github.com/users/${c.owner}/gists` : null;
-        if (userGistsUrl) {
-          const gistsRes = await fetch(userGistsUrl);
-          if (gistsRes.ok) {
-            const gists = await gistsRes.json();
-            const targetGist = gists.find(g => g.files && g.files[searchFilename]);
-            if (targetGist) {
-              cipherText = targetGist.files[searchFilename].content;
-            }
-          }
-        }
-      }
+      // 3. Fetch public Gists directly from the user's public endpoint (No PAT or Auth required)
+      const gistsRes = await fetch(`https://api.github.com/users/${owner}/gists?per_page=100`);
+      if (!gistsRes.ok) throw new Error("Could not retrieve user Gists.");
 
-      if (!cipherText) throw new Error("Pad not found or already expired.");
+      const gists = await gistsRes.json();
+      const targetGist = gists.find(g => g.files && g.files[searchFilename]);
+
+      if (!targetGist) throw new Error("Pad not found or already expired.");
+
+      // Fetch the raw content from the matching file
+      const rawUrl = targetGist.files[searchFilename].raw_url;
+      const contentRes = await fetch(rawUrl);
+      const cipherText = await contentRes.text();
 
       statusEl.innerText = "Decrypting content...";
       const decrypted = await decryptText(cipherText, rawPadName);
@@ -346,7 +342,7 @@
       padText.placeholder = err.message;
     }
   }
-
+  
   // Copy to Clipboard Button
   document.getElementById('copyBtn').onclick = () => {
     navigator.clipboard.writeText(padText.value);
