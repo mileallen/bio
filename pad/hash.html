@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Etherpad Lite - Hash Config Edition</title>
+  <style>
+    :root {
+      --bg-color: #121212;
+      --card-bg: #1e1e1e;
+      --border-color: #333333;
+      --text-main: #e0e0e0;
+      --text-muted: #a0a0a0;
+      --input-bg: #2a2a2a;
+      --button-bg: #3d3d3d;
+      --button-hover: #4f4f4f;
+      --accent: #777777;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      padding: 16px;
+    }
+
+    .container {
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      gap: 12px;
+    }
+
+    .top-bar {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 10px 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    input, select, button {
+      background: var(--input-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--accent);
+    }
+
+    .input-pad-name { flex: 2; min-width: 160px; }
+    .input-duration { width: 70px; }
+    .select-unit { width: 100px; }
+
+    button {
+      background: var(--button-bg);
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.2s ease;
+    }
+
+    button:hover {
+      background: var(--button-hover);
+    }
+
+    .editor-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    textarea {
+      width: 100%;
+      height: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: var(--text-main);
+      padding: 16px;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 15px;
+      line-height: 1.5;
+      resize: none;
+      outline: none;
+    }
+
+    textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .status-bar {
+      font-size: 13px;
+      color: var(--text-muted);
+      min-height: 18px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.75);
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .modal-content {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      padding: 20px;
+      border-radius: 6px;
+      width: 360px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .read-mode-bar {
+      display: none;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+      border-radius: 6px;
+    }
+
+    .btn-copy {
+      background: #2b522c;
+      border-color: #3e7a40;
+    }
+    .btn-copy:hover {
+      background: #386b3a;
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- WRITE MODE TOP BAR -->
+  <div id="writeBar" class="top-bar">
+    <input type="text" id="padName" class="input-pad-name" placeholder="Custom Pad Name (e.g. email-draft)">
+    <input type="number" id="expiryDuration" class="input-duration" min="1" value="30">
+    <select id="expiryUnit" class="select-unit">
+      <option value="minutes">Minutes</option>
+      <option value="hours">Hours</option>
+      <option value="days">Days</option>
+    </select>
+    <button id="saveBtn">Save Pad</button>
+    <button id="settingsBtn" title="GitHub Settings">⚙️</button>
+  </div>
+
+  <!-- READ-ONLY MODE TOP BAR -->
+  <div id="readBar" class="read-mode-bar">
+    <span id="readTitle" style="font-weight: 600;">Reading Pad...</span>
+    <div style="display: flex; gap: 8px;">
+      <button id="copyBtn" class="btn-copy">Copy Text</button>
+      <button id="newPadBtn">New Pad</button>
+    </div>
+  </div>
+
+  <!-- EDITOR AREA -->
+  <div class="editor-area">
+    <textarea id="padText" placeholder="Write your text here..."></textarea>
+  </div>
+
+  <div id="statusBar" class="status-bar">Ready</div>
+</div>
+
+<!-- PAT Settings Modal -->
+<div id="settingsModal" class="modal">
+  <div class="modal-content">
+    <h3 style="font-size: 16px;">GitHub Configuration</h3>
+    <input type="text" id="repoOwner" placeholder="GitHub Username">
+    <input type="text" id="repoName" placeholder="Private Orchestration Repo Name">
+    <input type="password" id="patToken" placeholder="PAT (scopes: gist, repo)">
+    <button id="saveSettingsBtn">Save Config</button>
+    <button id="generateBookmarkBtn" style="background: #2b4352;">Copy Bookmarklet URL</button>
+  </div>
+</div>
+
+<script>
+  // Runtime Session Memory
+  let sessionConfig = { owner: '', repo: '', token: '' };
+
+  async function hashName(name) {
+    const msgUint8 = new TextEncoder().encode(name.trim().toLowerCase());
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+    return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('').substring(0, 24);
+  }
+
+  async function encryptText(plainText, keyString) {
+    const enc = new TextEncoder();
+    const salt = crypto.getRandomValues(new Uint8Array(16));
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const keyMaterial = await crypto.subtle.importKey("raw", enc.encode(keyString), { name: "PBKDF2" }, false, ["deriveKey"]);
+    const key = await crypto.subtle.deriveKey({ name: "PBKDF2", salt, iterations: 100000, hash: "SHA-256" }, keyMaterial, { name: "AES-GCM", length: 256 }, false, ["encrypt"]);
+    const encrypted = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, enc.encode(plainText));
+    const combined = new Uint8Array(salt.length + iv.length + encrypted.byteLength);
+    combined.set(salt, 0); combined.set(iv, salt.length); combined.set(new Uint8Array(encrypted), salt.length + iv.length);
+    return btoa(String.fromCharCode(...combined));
+  }
+
+  async function decryptText(cipherBase64, keyString) {
+    const combined = new Uint8Array(atob(cipherBase64).split("").map(c => c.charCodeAt(0)));
+    const salt = combined.slice(0, 16); const iv = combined.slice(16, 28); const data = combined.slice(28);
+    const keyMaterial = await crypto.subtle.importKey("raw", new TextEncoder().encode(keyString), { name: "PBKDF2" }, false, ["deriveKey"]);
+    const key = await crypto.subtle.deriveKey({ name: "PBKDF2", salt, iterations: 100000, hash: "SHA-256" }, keyMaterial, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+    const decrypted = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, data);
+    return new TextDecoder().decode(decrypted);
+  }
+
+  const statusEl = document.getElementById('statusBar');
+  const padText = document.getElementById('padText');
+  const modal = document.getElementById('settingsModal');
+
+  // Parse Config from URL Fragment Hash (#config=PAT:owner:repo)
+  function parseHashConfig() {
+    const hash = window.location.hash.substring(1);
+    if (hash.startsWith('config=')) {
+      const configStr = decodeURIComponent(hash.substring(7));
+      const [token, owner, repo] = configStr.split(':');
+      if (token && owner && repo) {
+        sessionConfig = { token, owner, repo };
+        // Clean URL immediately so token isn't sitting in address bar
+        history.replaceState(null, '', window.location.pathname);
+        statusEl.innerText = "Config auto-loaded from URL fragment and cleared from address bar.";
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function getConfig() {
+    if (sessionConfig.token && sessionConfig.owner && sessionConfig.repo) {
+      return sessionConfig;
+    }
+    return {
+      owner: localStorage.getItem('gh_owner') || '',
+      repo: localStorage.getItem('gh_repo') || '',
+      token: localStorage.getItem('gh_token') || ''
+    };
+  }
+
+  document.getElementById('settingsBtn').onclick = () => {
+    const c = getConfig();
+    document.getElementById('repoOwner').value = c.owner;
+    document.getElementById('repoName').value = c.repo;
+    document.getElementById('patToken').value = c.token;
+    modal.style.display = 'flex';
+  };
+
+  document.getElementById('saveSettingsBtn').onclick = () => {
+    const owner = document.getElementById('repoOwner').value.trim();
+    const repo = document.getElementById('repoName').value.trim();
+    const token = document.getElementById('patToken').value.trim();
+    sessionConfig = { owner, repo, token };
+    localStorage.setItem('gh_owner', owner);
+    localStorage.setItem('gh_repo', repo);
+    localStorage.setItem('gh_token', token);
+    modal.style.display = 'none';
+    statusEl.innerText = "Config updated in memory.";
+  };
+
+  // Generate Bookmark URL with #config=PAT:owner:repo
+  document.getElementById('generateBookmarkBtn').onclick = () => {
+    const owner = document.getElementById('repoOwner').value.trim();
+    const repo = document.getElementById('repoName').value.trim();
+    const token = document.getElementById('patToken').value.trim();
+    
+    if (!owner || !repo || !token) {
+      alert("Fill in all three fields to generate a bookmark link.");
+      return;
+    }
+
+    const bookmarkUrl = `${window.location.origin}${window.location.pathname}#config=${encodeURIComponent(`${token}:${owner}:${repo}`)}`;
+    navigator.clipboard.writeText(bookmarkUrl);
+    alert("Bookmarklet URL copied to clipboard! Save this URL as a browser bookmark in Vivaldi.");
+  };
+
+  async function initRouter() {
+    const hasConfigInHash = parseHashConfig();
+
+    const rawPadName = decodeURIComponent(window.location.hash.substring(1)).trim();
+    if (!rawPadName || hasConfigInHash) return;
+
+    document.getElementById('writeBar').classList.add('hidden');
+    document.getElementById('readBar').style.display = 'flex';
+    document.getElementById('readTitle').innerText = `Pad: ${rawPadName}`;
+    padText.readOnly = true;
+    padText.placeholder = "Loading & decrypting pad...";
+
+    statusEl.innerText = "Locating pad Gist...";
+
+    try {
+      const padHash = await hashName(rawPadName);
+      const searchFilename = `pad_${padHash}.encrypted`;
+
+      let owner = getConfig().owner;
+      if (!owner) {
+        owner = prompt("Enter your GitHub Username to load this pad:");
+        if (owner) localStorage.setItem('gh_owner', owner.trim());
+      }
+
+      const gistsRes = await fetch(`https://api.github.com/users/${owner}/gists?per_page=100`);
+      if (!gistsRes.ok) throw new Error("Could not retrieve Gists.");
+
+      const gists = await gistsRes.json();
+      const targetGist = gists.find(g => g.files && g.files[searchFilename]);
+      if (!targetGist) throw new Error("Pad not found or expired.");
+
+      const rawUrl = targetGist.files[searchFilename].raw_url;
+      const contentRes = await fetch(rawUrl);
+      const cipherText = await contentRes.text();
+
+      statusEl.innerText = "Decrypting content...";
+      const decrypted = await decryptText(cipherText, rawPadName);
+      padText.value = decrypted;
+      padText.readOnly = false;
+      statusEl.innerText = "Pad loaded and decrypted!";
+    } catch (err) {
+      statusEl.innerText = `Error: ${err.message}`;
+      padText.placeholder = err.message;
+    }
+  }
+
+  document.getElementById('saveBtn').onclick = async () => {
+    const c = getConfig();
+    if (!c.owner || !c.repo || !c.token) {
+      alert('Please configure GitHub Settings via ⚙️ or open via Config Bookmark.');
+      return;
+    }
+
+    const padName = document.getElementById('padName').value.trim();
+    const text = padText.value;
+    const duration = parseInt(document.getElementById('expiryDuration').value, 10);
+    const unit = document.getElementById('expiryUnit').value;
+
+    if (!padName || !text) {
+      alert('Please specify a Pad Name and Content.');
+      return;
+    }
+
+    try {
+      statusEl.innerText = "Encrypting content...";
+      const encryptedPayload = await encryptText(text, padName);
+      const padHash = await hashName(padName);
+      const fileName = `pad_${padHash}.encrypted`;
+
+      statusEl.innerText = "Creating Gist...";
+      const gistRes = await fetch('https://api.github.com/gists', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${c.token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ description: `Etherpad: ${padName}`, public: true, files: { [fileName]: { content: encryptedPayload } } })
+      });
+
+      if (!gistRes.ok) throw new Error(`Gist Creation Failed: ${gistRes.statusText}`);
+      const gistData = await gistRes.json();
+      const gistId = gistData.id;
+
+      statusEl.innerText = "Scheduling deletion workflow...";
+      const dispatchUrl = `https://api.github.com/repos/${c.owner}/${c.repo}/dispatches`;
+      await fetch(dispatchUrl, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${c.token}`, 'Accept': 'application/vnd.github.v3+json' },
+        body: JSON.stringify({ event_type: 'schedule_gist_deletion', client_payload: { gist_id: gistId, duration: duration, unit: unit } })
+      });
+
+      const shareUrl = `${window.location.origin}${window.location.pathname}#${encodeURIComponent(padName)}`;
+      window.location.hash = encodeURIComponent(padName);
+      statusEl.innerText = `Pad saved! Share Link: ${shareUrl}`;
+    } catch (err) {
+      statusEl.innerText = `Error: ${err.message}`;
+    }
+  };
+
+  document.getElementById('copyBtn').onclick = () => {
+    navigator.clipboard.writeText(padText.value);
+    statusEl.innerText = "Copied to clipboard!";
+    setTimeout(() => { statusEl.innerText = "Ready"; }, 2000);
+  };
+
+  document.getElementById('newPadBtn').onclick = () => {
+    window.location.hash = '';
+    window.location.reload();
+  };
+
+  initRouter();
+</script>
+</body>
+</html>
