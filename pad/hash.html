@@ -407,6 +407,13 @@
     window.location.reload();
   };
 
+  // Close settings modal when clicking outside the content box
+  window.addEventListener('click', (event) => {
+    if (event.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+
   initRouter();
 </script>
 </body>
